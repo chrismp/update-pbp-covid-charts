@@ -4,3 +4,5 @@ o=output
 mkdir -p $o
 
 python scrape-download.py $o
+
+Rscript script.r
