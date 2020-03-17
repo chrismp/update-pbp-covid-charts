@@ -1,6 +1,17 @@
-install.packages("devtools")
+pkgs <- c(
+  "devtools",
+  "dplyr"
+)
+
+for(x in pkgs){
+  if(!is.element(x, installed.packages()[,1])){
+    install.packages(x, repos="http://cran.fhcrc.org")
+  } else {
+    print(paste(x, " library already installed"))
+  }
+}
+
 devtools::install_github("munichrocker/DatawRappr")
-install.packages("dplyr")
 
 library(DatawRappr)
 library(dplyr)
