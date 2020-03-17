@@ -1,0 +1,6 @@
+#!/bin/bash
+
+o=output
+mkdir -p $o
+
+python scrape-download.py $o
