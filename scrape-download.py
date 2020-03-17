@@ -35,8 +35,8 @@ for i, county in enumerate(data['features']):
 
 # In[40]:
 
-
-with open(f"{sys.argv[1]}/FL-{timestamp}.csv", "w", newline="") as outfile:
+filename = sys.argv[1] + "/FL-" + timestamp + ".csv"
+with open(filename, "w", newline="") as outfile:
     writer = csv.writer(outfile)
     writer.writerow(list(masterlist[0].keys()))
     for row in masterlist:
