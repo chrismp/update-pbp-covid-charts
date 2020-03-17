@@ -13,7 +13,8 @@ from collections import OrderedDict
 
 url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Florida_COVID19_Cases_by_County/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
 content = requests.get(url).content
-data = json.loads(content)
+data = requests.get(url).json()
+#data = json.loads(content)
 timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
 
 

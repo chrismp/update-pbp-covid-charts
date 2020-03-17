@@ -1,5 +1,6 @@
-# install.packages("devtools")
-# devtools::install_github("munichrocker/DatawRappr")
+install.packages("devtools")
+devtools::install_github("munichrocker/DatawRappr")
+install.packages("dplyr")
 
 library(DatawRappr)
 library(dplyr)
