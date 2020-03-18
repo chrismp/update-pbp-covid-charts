@@ -1,8 +1,12 @@
 #!/bin/bash
 
+timestamp=`date +%Y-%m-%d_%H%M%S`
+
 o=output
-mkdir -p $o
+r=$o/raw
+mkdir -p $r
 
-python scrape-download.py $o
+rawFile=$r/FL-$timestamp.csv
 
-Rscript script.r
+python scrape-download.py $rawFile
+Rscript script.r $rawFile $o

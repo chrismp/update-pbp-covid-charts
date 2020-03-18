@@ -1,3 +1,5 @@
+args = commandArgs(trailingOnly=TRUE)
+
 pkgs <- c(
   "devtools",
   "dplyr"
@@ -27,7 +29,7 @@ func.SummCases <- function(gdf){
 }
 
 # Read latest CSV of COVID19 data and create CSVs that will be uploaded to DataWrapper
-df <- read.csv("output/FL-2020-03-17_1144.csv")
+df <- read.csv(args[1])
 
 df$AgeGroup <- ifelse(
   test = df$age >= 80,
@@ -93,14 +95,14 @@ chartDFs[["sex"]] <- func.SummCases(
   ) 
 )
 
-chartDFs[["age group"]] <- func.SummCases(
+chartDFs[["age-group"]] <- func.SummCases(
   group_by(
     .data = df,
     AgeGroup
   )
 ) 
 
-chartDFs[["travel status"]] <- func.SummCases(
+chartDFs[["travel-status"]] <- func.SummCases(
   group_by(
     .data = df,
     TravelStatus
@@ -109,7 +111,7 @@ chartDFs[["travel status"]] <- func.SummCases(
 
 
 # Write files
-out <- "output-datawrapper"
+out <- paste0(args[2],"/datawrapper")
 dir.create(out)
 
 for (i in 1:length(chartDFs)) {

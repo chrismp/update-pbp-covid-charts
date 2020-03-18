@@ -14,8 +14,6 @@ from collections import OrderedDict
 url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Florida_COVID19_Cases_by_County/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
 content = requests.get(url).content
 data = requests.get(url).json()
-#data = json.loads(content)
-timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H%M")
 
 
 # In[39]:
@@ -35,9 +33,7 @@ for i, county in enumerate(data['features']):
 
 
 # In[40]:
-
-filename = sys.argv[1] + "/FL-" + timestamp + ".csv"
-with open(filename, "w", newline="") as outfile:
+with open(sys.argv[1], "w", newline="") as outfile:
     writer = csv.writer(outfile)
     writer.writerow(list(masterlist[0].keys()))
     for row in masterlist:
