@@ -12,8 +12,7 @@ from collections import OrderedDict
 
 
 url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Detailed_COVID_19_Case_Data/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
-response = requests.get(url).content
-j = json.loads(response)
+j = requests.get(url).json()
 
 
 # In[36]:
