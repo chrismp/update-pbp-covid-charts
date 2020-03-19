@@ -29,32 +29,32 @@ func.SummCases <- function(gdf){
   )
 }
 
-# Read latest CSV of COVID19 data and create CSVs that will be uploaded to DataWrapper
+# Create CSVs for DataWrapper charts
 df <- read.csv(args[1])
 
 df$AgeGroup <- ifelse(
-  test = df$age >= 80,
+  test = df$Age >= 80,
   yes = "80 or older",
   no = ifelse(
-    test = df$age >= 70,
+    test = df$Age >= 70,
     yes = "70-79",
     no = ifelse(
-      test = df$age >= 60,
+      test = df$Age >= 60,
       yes = "60-69",
       no = ifelse(
-        test = df$age >= 50,
+        test = df$Age >= 50,
         yes = "50-59",
         no = ifelse(
-          test = df$age >= 40,
+          test = df$Age >= 40,
           yes = "40-49",
           no = ifelse(
-            test = df$age >= 30,
+            test = df$Age >= 30,
             yes = "30-39",
             no = ifelse(
-              test = df$age >= 18,
+              test = df$Age >= 18,
               yes = "18-29",
               no = ifelse(
-                test = df$age > 0,
+                test = df$Age > 0,
                 yes = "17 or younger",
                 no = "Unknown"
               )
@@ -66,33 +66,21 @@ df$AgeGroup <- ifelse(
   )
 )
 
-df$TravelStatus <- ifelse(
-  test = tolower(substr(x = df$travel,  start = 1,  stop = 3)) == "yes",
-  yes = "Yes",
-  no = ifelse(
-    test = tolower(df$travel)=="no",
-    yes = "No",
-    no = ifelse(
-      test = tolower(df$travel)=="unknown",
-      yes = "Unknown",
-      no = NA
-    )
-  )
-)
 
 chartDFs <- list()
 
 chartDFs[["county"]] <- func.SummCases(
-    group_by(
+  group_by(
     .data = df,
-    county 
+    County 
   )
 )
+
 
 chartDFs[["sex"]] <- func.SummCases(
   group_by(
     .data = df,
-    sex = fct_explicit_na(gender, na_level = "Unknown")
+    Sex = fct_explicit_na(Sex, na_level = "Unknown")
   ) 
 )
 
@@ -106,12 +94,11 @@ chartDFs[["age-group"]] <- func.SummCases(
 chartDFs[["travel-status"]] <- func.SummCases(
   group_by(
     .data = df,
-    TravelStatus
+    Travel_Related
   )
 )
 
 
-# Write files
 out <- paste0(args[2],"/datawrapper")
 dir.create(out)
 
@@ -123,26 +110,5 @@ for (i in 1:length(chartDFs)) {
     row.names = F
   )
 }
-
-
-# # Update charts
-# dwapi <- Sys.getenv("DATAWRAPPER_API")
-# datawrapper_auth(dwapi)
-# 
-# dw_edit_chart(
-#   chart_id = "BSF3m", # age groups
-#   api_key = dwapi,
-#   data = chartDFs[["age group"]]
-# )
-
-
-
-
-
-
-
-
-
-
 
 

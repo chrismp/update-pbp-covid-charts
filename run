@@ -8,5 +8,8 @@ mkdir -p $r
 
 rawFile=$r/FL-$timestamp.csv
 
-python scrape-download.py $rawFile
-Rscript script.r $rawFile $o
+echo "Downloading COVID-19 data."
+python download-covid19-data.py $rawFile
+
+echo "Making data files for charts."
+Rscript make-datafiles-for-charts.r $rawFile $o
