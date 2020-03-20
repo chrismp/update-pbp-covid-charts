@@ -14,9 +14,6 @@ for(x in pkgs){
   }
 }
 
-#devtools::install_github("munichrocker/DatawRappr")
-
-#library(DatawRappr)
 library(dplyr)
 library(forcats) 
 

@@ -13,3 +13,6 @@ python download-covid19-data.py $rawFile
 
 echo "Making data files for charts."
 Rscript make-datafiles-for-charts.r $rawFile $o
+
+echo "Updating charts"
+Rscript update-charts.r $timestamp
