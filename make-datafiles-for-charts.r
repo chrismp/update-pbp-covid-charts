@@ -80,7 +80,7 @@ chartDFs[["county"]] <- func.SummCases(
 chartDFs[["sex"]] <- func.SummCases(
   group_by(
     .data = df,
-    Sex = fct_explicit_na(Sex, na_level = "Unknown")
+    Sex = fct_explicit_na(Gender, na_level = "Unknown")
   ) 
 )
 
@@ -94,7 +94,7 @@ chartDFs[["age-group"]] <- func.SummCases(
 chartDFs[["travel-status"]] <- func.SummCases(
   group_by(
     .data = df,
-    Travel_Related
+    Travel_related
   )
 )
 
