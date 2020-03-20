@@ -11,7 +11,7 @@ from collections import OrderedDict
 # In[2]:
 
 
-url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Detailed_COVID_19_Case_Data/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
+url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Florida_COVID19_Case_Line_Data/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
 response = requests.get(url).content
 j = requests.get(url).json()
 
