@@ -43,6 +43,7 @@ for (i in 1:length(chartIDs)) {
 
   dw_publish_chart(
     chart_id = chartIDs[[i]],
-    api_key = apikey
+    api_key = apikey,
+    return_urls = TRUE
   )  
 }
