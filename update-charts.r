@@ -26,7 +26,7 @@ updateTimeFormat <- gsub(
   x = updateTimeFormat
 )
 
-chartNote <- paste0("Figures reflect all known COVID-19 cases as  ",updateTimeFormat," on ",updateDateFormat,".")
+chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,".")
 
 chartIDs <- list(
   "county-cases-chart" = "Vdnj6",
