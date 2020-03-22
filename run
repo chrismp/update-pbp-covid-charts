@@ -13,7 +13,7 @@ python download-covid19-data.py $rawFile
 ret=$?
 
 if [[ $ret -eq 1 ]]; then
-	"Exiting program"
+	echo "Exiting program"
 	exit
 fi
 
