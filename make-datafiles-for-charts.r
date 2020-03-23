@@ -35,6 +35,8 @@ if(args[4]==0){
     file = args[1],
     stringsAsFactors = F
   )
+
+  positives[positives$County=="Dade",]$County <- "Miami-Dade"
   
   positives$AgeGroup <- ifelse(
     test = positives$Age >= 80,
