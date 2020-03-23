@@ -10,6 +10,22 @@ datetime <- as.POSIXct(
   format = "%Y-%m-%d_%H%M%S"  
 )
 
+updateDateFormat <- format(
+  x = datetime,
+  format = "%B %d, %Y"
+)
+
+updateTimeFormat <- format(
+  x = datetime,
+  "%l:%M %P"
+)
+updateTimeFormat <- trimws(updateTimeFormat)
+updateTimeFormat <- gsub(
+  pattern = 'm',
+  replacement = ".m.",
+  x = updateTimeFormat
+)
+
 chartIDs <- list(
   "county-cases-chart" = "Vdnj6",
   "travel-related" = "ORvDZ",
@@ -17,6 +33,8 @@ chartIDs <- list(
   "south-fl" = "aof13",
   "cases-map" = "3OyJM"
 )
+
+
 
 if(args[4]==0){
   # Update South FL chart data
@@ -50,23 +68,7 @@ if(args[4]==0){
   )
   
   
-  # Update annotation for each chart
-  updateDateFormat <- format(
-    x = datetime,
-    format = "%B %d, %Y"
-  )
-  
-  updateTimeFormat <- format(
-    x = datetime,
-    "%l:%M %P"
-  )
-  updateTimeFormat <- trimws(updateTimeFormat)
-  updateTimeFormat <- gsub(
-    pattern = 'm',
-    replacement = ".m.",
-    x = updateTimeFormat
-  )
-  
+  # Update annotation for each chart  
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,".")
   
   for (i in 1:length(chartIDs)) {
