@@ -64,7 +64,8 @@ chartIDs <- list(
   "county-cases-chart" = "Vdnj6",
   "travel-related" = "ORvDZ",
   "age-group" = "BSF3m",
-  "south-fl" = "aof13"
+  "south-fl" = "aof13",
+  "cases-map" = "3OyJM"
 )
 
 for (i in 1:length(chartIDs)) {
@@ -80,3 +81,16 @@ for (i in 1:length(chartIDs)) {
     return_urls = TRUE
   )  
 }
+
+chartIDs[["tests-map"]] <- "4nU0g"
+dw_edit_chart(
+  chart_id = chartIDs[["tests-map"]],
+  api_key = apikey,
+  annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,".")
+)
+
+dw_publish_chart(
+  chart_id = chartIDs[[i]],
+  api_key = apikey,
+  return_urls = TRUE
+) 

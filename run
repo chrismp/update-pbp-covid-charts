@@ -1,24 +1,41 @@
 #!/bin/bash
 
 timestamp=`date +%Y-%m-%d_%H%M%S`
+echo "Program started at $timestamp"
 
 o=output
 r=$o/raw
-mkdir -p $r
+p=$r/positive-cases
+t=$r/tests
+mkdir -p $p $t
 
-rawFile=$r/FL-$timestamp.csv
+f=FL-$timestamp.csv
+positiveCases=$p/$f
+tests=$t/$f
 
-echo "Downloading COVID-19 data at $timestamp"
-python download-covid19-data.py $rawFile
-ret=$?
+url1="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
+url2="FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
 
-if [[ $ret -eq 1 ]]; then
+echo "Downloading confirmed COVID-19 data"
+pURL="$url1/Florida_COVID19_Case_Line_Data/$url2"
+python download-covid19-data.py $pURL $p $positiveCases
+ret1=$?
+echo $ret1
+
+echo "Downloading COVID-10 testing data"
+tURL="$url1/Florida_Testing/$url2"
+python download-covid19-data.py $tURL $t $tests
+ret2=$?
+echo $ret2
+
+
+if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
 	echo "Exiting program"
 	exit
 fi
 
 echo "Making data files for charts."
-Rscript make-datafiles-for-charts.r $rawFile $o
+Rscript make-datafiles-for-charts.r $positiveCases $o/datawrapper
 
 echo "Updating charts"
-Rscript update-charts.r $timestamp "output/datawrapper/county.csv" "output/datawrapper/south-fl.csv"
+Rscript update-charts.r $timestamp "output/datawrapper/county.csv" "output/datawrapper/south-fl.csv" 

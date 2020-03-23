@@ -11,7 +11,7 @@ from collections import OrderedDict
 # In[2]:
 
 
-url = "https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services/Florida_COVID19_Case_Line_Data/FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
+url = sys.argv[1]
 response = requests.get(url).content
 j = requests.get(url).json()
 
@@ -39,15 +39,19 @@ with open(tmpf, "w", newline="") as outfile:
 
 # In[5]:
 
+rawDir = sys.argv[2]+'/'
+rawFiles = sorted([f for f in os.listdir(rawDir)])
+if len(rawFiles)==0:
+	os.rename(tmpf,sys.argv[3])
+	exit(0)
 
-rawFiles = sorted([f for f in os.listdir("output/raw/")])
 latestFile = rawFiles[-1]
 
 
 # In[6]:
 
 
-tempAndLatestFileSameSize = os.path.getsize("output/raw/"+latestFile) == os.path.getsize(tmpf)
+tempAndLatestFileSameSize = os.path.getsize(rawDir+latestFile) == os.path.getsize(tmpf)
 if tempAndLatestFileSameSize:
     print("Downloaded file is not an update. Removing '"+tmpf+"''")
     os.remove(tmpf)
@@ -57,7 +61,7 @@ if tempAndLatestFileSameSize:
 # In[7]:
 
 
-os.rename(tmpf,sys.argv[1])
+os.rename(tmpf,sys.argv[3])
 
 
 # In[14]:
