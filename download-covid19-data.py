@@ -46,6 +46,9 @@ if len(rawFiles)==0:
 	exit(0)
 
 latestFile = rawFiles[-1]
+print(latestFile)
+print(os.path.getsize(rawDir+latestFile))
+print(os.path.getsize(tmpf))
 
 
 # In[6]:

@@ -22,7 +22,7 @@ python download-covid19-data.py $pURL $p $positiveCases
 ret1=$?
 echo $ret1
 
-echo "Downloading COVID-10 testing data"
+echo "Downloading COVID-19 testing data"
 tURL="$url1/Florida_Testing/$url2"
 python download-covid19-data.py $tURL $t $tests
 ret2=$?
