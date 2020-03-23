@@ -37,7 +37,8 @@ if(args[4]==0){
   write.csv(
     x = southFLCases,
     file = args[3],
-    row.names = F
+    row.names = F,
+    na = ''
   )
   
   
