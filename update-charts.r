@@ -37,37 +37,6 @@ chartIDs <- list(
 
 
 if(args[4]==0){
-  # Update South FL chart data
-  sflChartTimestamp <- format(
-    x = datetime,
-    format = "%m/%d/%Y %H:%M"
-  )
-  
-  countyCases <- read.csv(args[2])
-  southFLCases <- read.csv(
-    file = args[3],
-    check.names = F,
-    stringsAsFactors = F
-  )
-  
-  southFLCases <- rbind(
-    southFLCases,
-    c(
-      sflChartTimestamp,
-      countyCases[which(countyCases$County=="Broward"),]$Confirmed.cases,
-      countyCases[which(countyCases$County=="Dade"),]$Confirmed.cases,
-      countyCases[which(countyCases$County=="Palm Beach"),]$Confirmed.cases
-    )
-  )
-  
-  write.csv(
-    x = southFLCases,
-    file = args[3],
-    row.names = F,
-    na = ''
-  )
-  
-  
   # Update annotation for each chart  
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,".")
   

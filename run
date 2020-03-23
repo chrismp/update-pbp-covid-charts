@@ -35,7 +35,8 @@ if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
 fi
 
 echo "Making data files for charts."
-Rscript make-datafiles-for-charts.r $positiveCases $tests $o/datawrapper $ret1 $ret2
+od=$o/datawrapper
+Rscript make-datafiles-for-charts.r $positiveCases $tests $od $ret1 $ret2 $timestamp $od/south-fl.csv $od/county.csv
 
 echo "Updating charts"
-Rscript update-charts.r $timestamp "output/datawrapper/county.csv" "output/datawrapper/south-fl.csv" $ret1 $ret2
+Rscript update-charts.r $timestamp $od/county.csv $od/south-fl.csv $ret1 $ret2

@@ -153,3 +153,42 @@ for (i in 1:length(chartDFs)) {
     row.names = F
   )
 }
+
+
+# Update South FL CSV
+if(args[4]==0){
+  datetime <- as.POSIXct(
+    x = args[6],
+    format = "%Y-%m-%d_%H%M%S"  
+  )
+
+  sflChartTimestamp <- format(
+    x = datetime,
+    format = "%m/%d/%Y %H:%M"
+  )
+
+  countyCases <- read.csv(args[8])
+  southFLCases <- read.csv(
+    file = args[7],
+    check.names = F,
+    stringsAsFactors = F
+  )
+
+  southFLCases <- rbind(
+    southFLCases,
+    c(
+      sflChartTimestamp,
+      countyCases[which(countyCases$County=="Broward"),]$Confirmed.cases,
+      countyCases[which(countyCases$County=="Miami-Dade"),]$Confirmed.cases,
+      countyCases[which(countyCases$County=="Palm Beach"),]$Confirmed.cases
+    )
+  )
+
+  write.csv(
+    x = southFLCases,
+    file = args[7],
+    row.names = F,
+    na = ''
+  )
+}
+
