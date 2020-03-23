@@ -21,4 +21,4 @@ echo "Making data files for charts."
 Rscript make-datafiles-for-charts.r $rawFile $o
 
 echo "Updating charts"
-Rscript update-charts.r $timestamp
+Rscript update-charts.r $timestamp "output/datawrapper/county.csv" "output/datawrapper/south-fl.csv"
