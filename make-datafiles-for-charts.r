@@ -30,7 +30,7 @@ chartDFs <- list()
 
 
 # Create CSVs for DataWrapper charts showing positive cases
-if(argv[4]==0){
+if(args[4]==0){
   positives <- read.csv(
     file = args[1],
     stringsAsFactors = F
@@ -116,7 +116,7 @@ if(argv[4]==0){
 
 
 # Create CSVs for COVID19 testing data
-if(argv[5]==0){
+if(args[5]==0){
   
   tests <- read.csv(
     file = args[2],
