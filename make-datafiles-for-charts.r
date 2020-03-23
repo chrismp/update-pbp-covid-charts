@@ -26,6 +26,13 @@ func.SummCases <- function(gdf){
   )
 }
 
+
+countyPops <- read.csv(
+  file = "source/2019-flbebr-county-pop-estimates.csv",
+  check.names = F,
+  stringsAsFactors = F
+)
+
 chartDFs <- list()
 
 
@@ -77,12 +84,6 @@ if(args[4]==0){
       .data = positives,
       County 
     )
-  )
-  
-  countyPops <- read.csv(
-    file = "source/2019-flbebr-county-pop-estimates.csv",
-    check.names = F,
-    stringsAsFactors = F
   )
   
   positiveRateName <- "counties-positive-cases-rate"
