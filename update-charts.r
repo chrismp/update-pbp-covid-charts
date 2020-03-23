@@ -36,7 +36,7 @@ southFLCases <- rbind(
 
 write.csv(
   x = southFLCases,
-  file = args[2],
+  file = args[3],
   row.names = F
 )
 
