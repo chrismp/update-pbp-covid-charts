@@ -115,7 +115,7 @@ chartDFs[["travel-status"]] <- func.SummCases(
 
 # Create CSVs for COVID19 testing data
 tests <- read.csv(
-  file = "output/raw/tests/FL-2020-03-22_235356.csv",
+  file = args[2],
   stringsAsFactors = F
 )
 
@@ -132,7 +132,7 @@ chartDFs[[testRateName]]$`Tests per 100,000 people` <- chartDFs[[testRateName]]$
 
 
 # Write CSVs
-out <- paste0(args[2])
+out <- paste0(args[3])
 dir.create(out)
 
 for (i in 1:length(chartDFs)) {
