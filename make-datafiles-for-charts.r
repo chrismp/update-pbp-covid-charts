@@ -27,7 +27,10 @@ func.SummCases <- function(gdf){
 }
 
 # Create CSVs for DataWrapper charts
-df <- read.csv(args[1])
+df <- read.csv(
+  file = args[1],
+  stringsAsFactors = F
+)
 
 df$AgeGroup <- ifelse(
   test = df$Age >= 80,
@@ -73,6 +76,20 @@ chartDFs[["county"]] <- func.SummCases(
   )
 )
 
+countyPops <- read.csv(
+  file = "source/2019-flbebr-county-pop-estimates.csv",
+  check.names = F,
+  stringsAsFactors = F
+)
+
+rateName <- "counties-positive-cases-rate"
+chartDFs[[rateName]] <- merge(
+  x = chartDFs[["county"]],
+  y = countyPops,
+  by = "County"
+)
+
+chartDFs[[rateName]]$`Confirmed cases per 100,000 people` <- chartDFs[[rateName]]$`Confirmed cases` / chartDFs[[rateName]]$`2019 population estimate` * 100000
 
 chartDFs[["sex"]] <- func.SummCases(
   group_by(

@@ -1,8 +1,7 @@
-.Renviron
-output
-*.csv
-.Rproj.user
 *.Rproj
-.RData
-.Rhistory
 *.log
+.RData
+.Renviron
+.Rhistory
+.Rproj.user
+output
