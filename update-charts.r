@@ -97,7 +97,7 @@ if(args[5]==0){
   )
   
   dw_publish_chart(
-    chart_id = chartIDs[[i]],
+    chart_id = chartIDs[["tests-map"]],
     api_key = apikey,
     return_urls = TRUE
   )  
