@@ -10,6 +10,14 @@ datetime <- as.POSIXct(
   format = "%Y-%m-%d_%H%M%S"  
 )
 
+chartIDs <- list(
+  "county-cases-chart" = "Vdnj6",
+  "travel-related" = "ORvDZ",
+  "age-group" = "BSF3m",
+  "south-fl" = "aof13",
+  "cases-map" = "3OyJM"
+)
+
 if(args[4]==0){
   # Update South FL chart data
   sflChartTimestamp <- format(
@@ -60,14 +68,6 @@ if(args[4]==0){
   )
   
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,".")
-  
-  chartIDs <- list(
-    "county-cases-chart" = "Vdnj6",
-    "travel-related" = "ORvDZ",
-    "age-group" = "BSF3m",
-    "south-fl" = "aof13",
-    "cases-map" = "3OyJM"
-  )
   
   for (i in 1:length(chartIDs)) {
     dw_edit_chart(
