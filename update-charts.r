@@ -38,7 +38,7 @@ chartIDs <- list(
 
 if(args[4]==0){
   # Update annotation for each chart  
-  chartNote <- paste0("Figures reflect all known COVID-19 cases in Florida residents as of ",updateTimeFormat," on ",updateDateFormat,".")
+  chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,".")
   
   for (i in 1:length(chartIDs)) {
     dw_edit_chart(
@@ -62,7 +62,7 @@ if(args[5]==0){
   dw_edit_chart(
     chart_id = chartIDs[["tests-map"]],
     api_key = apikey,
-    annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,". Positive results include non-Florida residents.")
+    annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,".")
   )
   
   dw_publish_chart(
