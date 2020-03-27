@@ -1,9 +1,12 @@
-args = commandArgs(trailingOnly=TRUE)
+options(scipen = 999)
+
+args <- commandArgs(trailingOnly=TRUE)
 
 pkgs <- c(
   "devtools",
   "dplyr",
-  "forcats"
+  "forcats",
+  "reshape2"
 )
 
 for(x in pkgs){
@@ -15,7 +18,8 @@ for(x in pkgs){
 }
 
 library(dplyr)
-library(forcats) 
+library(forcats)
+library(reshape2)
 
 func.SummCases <- function(gdf){
   return(
@@ -44,6 +48,19 @@ if(args[4]==0){
   )
 
   positives[positives$County=="Dade",]$County <- "Miami-Dade"
+  
+  positives$SouthFLCounties <- ifelse(
+    test = positives$County == "Miami-Dade" | positives$County == "Broward" | positives$County == "Palm Beach",
+    yes = positives$County,
+    no = "Rest of state"
+  )
+  
+  correctUnixTimePositiveCases <- (positives$Case_/1000)
+  positives$caseDate <- as.POSIXct(
+    x = correctUnixTimePositiveCases, 
+    origin = "1970-01-01",
+    tz = "GMT"
+  )
   
   positives$AgeGroup <- ifelse(
     test = positives$Age >= 80,
@@ -79,6 +96,23 @@ if(args[4]==0){
     )
   )
   
+  chartDFs[["cases-by-date"]] <- func.SummCases(
+    group_by(
+      .data = positives,
+      caseDate
+    )
+  )
+  
+  chartDFs[["cases-by-date-SouthFL"]] <- func.SummCases(
+    group_by(
+      .data = positives,
+      caseDate,
+      SouthFLCounties
+    )
+  ) %>%
+    dcast(SouthFLCounties ~ caseDate) %>%
+    
+  
   chartDFs[["county"]] <- func.SummCases(
     group_by(
       .data = positives,
@@ -109,7 +143,7 @@ if(args[4]==0){
     )
   ) 
   
-  chartDFs[["travel-status"]] <- func.SummCases(
+  chartDFs[["travel-related"]] <- func.SummCases(
     group_by(
       .data = positives,
       Travel_related
@@ -140,19 +174,19 @@ if(args[5]==0){
   
 }
 
-
-# Write CSVs
-out <- paste0(args[3])
-dir.create(out)
-
-for (i in 1:length(chartDFs)) {
-  write.csv(
-    x = chartDFs[[i]],
-    file = paste0(out,'/',names(chartDFs)[i],".csv"),
-    na = '',
-    row.names = F
-  )
-}
+  
+  # Write CSVs
+  out <- paste0(args[3])
+  dir.create(out)
+  
+  for (i in 1:length(chartDFs)) {
+    write.csv(
+      x = chartDFs[[i]],
+      file = paste0(out,'/',names(chartDFs)[i],".csv"),
+      na = '',
+      row.names = F
+    )
+  }
 
 
 # Update South FL CSV
