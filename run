@@ -14,7 +14,7 @@ positiveCases=$p/$f
 tests=$t/$f
 
 url1="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
-url2="FeatureServer/0/query?f=json&where=1%3D1&returnGeometry=false&outFields=*"
+url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometry=false&outFields=*"
 
 echo "Downloading confirmed COVID-19 data"
 pURL="$url1/Florida_COVID19_Case_Line_Data/$url2"
