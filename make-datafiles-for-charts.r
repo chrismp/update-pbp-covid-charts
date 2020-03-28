@@ -1,10 +1,9 @@
-options(scipen = 999)
-
 args <- commandArgs(trailingOnly=TRUE)
+
+options(scipen = 999)
 
 pkgs <- c(
   "devtools",
-  "magrittr",
   "dplyr",
   "forcats",
   "reshape2"
@@ -18,7 +17,6 @@ for(x in pkgs){
   }
 }
 
-library(magrittr)
 library(dplyr)
 library(forcats)
 library(reshape2)
@@ -105,7 +103,8 @@ if(args[4]==0){
     )
   )
   
-  chartDFs[["cases-by-date-SouthFL"]] <- func.SummCases(
+  sflVFL <- "cases-by-date-SouthFL"
+  chartDFs[[sflVFL]] <- func.SummCases(
     group_by(
       .data = positives,
       caseDate,
@@ -113,6 +112,23 @@ if(args[4]==0){
     )
   ) %>%
     dcast(SouthFLCounties ~ caseDate)
+  
+  chartDFs[[sflVFL]]$Order <- ifelse(
+    test = chartDFs[[sflVFL]]$SouthFLCounties == "Rest of state",
+    yes = 1,
+    no = ifelse(
+      test = chartDFs[[sflVFL]]$SouthFLCounties == "Miami-Dade",
+      yes = 2,
+      no = ifelse(
+        test = chartDFs[[sflVFL]]$SouthFLCounties == "Broward",
+        yes = 3,
+        no = 4
+      )
+      
+    )
+  ) 
+  chartDFs[[sflVFL]] <- chartDFs[[sflVFL]][order(chartDFs[[sflVFL]]$Order),]
+  
   
   chartDFs[["county"]] <- func.SummCases(
     group_by(
