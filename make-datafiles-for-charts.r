@@ -4,6 +4,7 @@ args <- commandArgs(trailingOnly=TRUE)
 
 pkgs <- c(
   "devtools",
+  "magrittr",
   "dplyr",
   "forcats",
   "reshape2"
@@ -11,12 +12,13 @@ pkgs <- c(
 
 for(x in pkgs){
   if(!is.element(x, installed.packages()[,1])){
-    install.packages(x, repos="http://cran.fhcrc.org")
+    install.packages(x)
   } else {
     print(paste(x, " library already installed"))
   }
 }
 
+library(magrittr)
 library(dplyr)
 library(forcats)
 library(reshape2)
@@ -110,8 +112,7 @@ if(args[4]==0){
       SouthFLCounties
     )
   ) %>%
-    dcast(SouthFLCounties ~ caseDate) %>%
-    
+    dcast(SouthFLCounties ~ caseDate)
   
   chartDFs[["county"]] <- func.SummCases(
     group_by(
