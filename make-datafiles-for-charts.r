@@ -115,12 +115,14 @@ if(args[4]==0){
   )
   
   if("caseDate" %in% colnames(positives)){
-    chartDFs[["cases-by-date"]] <- func.SummCases(
+    cByD <- "cases-by-date"
+    chartDFs[[cByD]] <- func.SummCases(
       group_by(
         .data = positives,
         caseDate
       )
     )
+    chartDFs[[cByD]][,"Cumulative cases"] <- cumsum(chartDFs[[cByD]]$`Confirmed cases`)
     
     sflVFL <- "cases-by-date-SouthFL"
     chartDFs[[sflVFL]] <- func.SummCases(
