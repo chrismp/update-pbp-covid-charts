@@ -40,7 +40,7 @@ countyPops <- read.csv(
 chartDFs <- list()
 
 
-# Create CSVs for DataWrapper charts showing positive cases
+# Create dataframes for DataWrapper charts showing positive cases
 if(args[4]==0){
   positives <- read.csv(
     file = args[1],
@@ -55,11 +55,29 @@ if(args[4]==0){
     no = "Rest of state"
   )
   
-  correctUnixTimePositiveCases <- (positives$Case_/1000)
-  positives$caseDate <- as.POSIXct(
-    x = correctUnixTimePositiveCases, 
-    origin = "1970-01-01",
-    tz = "GMT"
+  tryCatch(
+    expr = {
+      correctUnixTimePositiveCases <- (positives$Case_/1000)
+      positives$caseDate <- format(
+        x = as.POSIXct(
+          x = correctUnixTimePositiveCases,
+          origin = "1970-01-01",
+          tz = "GMT"
+        ),
+        "%Y-%m-%d"
+      ) 
+    },
+    error = function(cond) {
+      message("ERROR: see below")
+      message(cond)
+    },
+    warning = function(cond) {
+      message("WARNING: see below")
+      message(cond)
+    },
+    finally = {
+      message("Completed attempt to process Unix timestamp of COVID-19 cases if they were written as such.")
+    }
   )
   
   positives$AgeGroup <- ifelse(
@@ -96,22 +114,47 @@ if(args[4]==0){
     )
   )
   
-  chartDFs[["cases-by-date"]] <- func.SummCases(
-    group_by(
-      .data = positives,
-      caseDate
+  if("caseDate" %in% colnames(positives)){
+    chartDFs[["cases-by-date"]] <- func.SummCases(
+      group_by(
+        .data = positives,
+        caseDate
+      )
     )
-  )
-  
-  sflVFL <- "cases-by-date-SouthFL"
-  chartDFs[[sflVFL]] <- func.SummCases(
-    group_by(
-      .data = positives,
-      caseDate,
-      SouthFLCounties
+    
+    sflVFL <- "cases-by-date-SouthFL"
+    chartDFs[[sflVFL]] <- func.SummCases(
+      group_by(
+        .data = filter(
+          .data = positives,
+          !is.na(caseDate)
+        ),
+        caseDate,
+        SouthFLCounties
+      )
+    ) %>%
+      dcast(SouthFLCounties ~ caseDate)
+  } else {
+    chartDFs[["cases-by-date"]] <- func.SummCases(
+      group_by(
+        .data = positives,
+        Case_
+      )
     )
-  ) %>%
-    dcast(SouthFLCounties ~ caseDate)
+    
+    sflVFL <- "cases-by-date-SouthFL"
+    chartDFs[[sflVFL]] <- func.SummCases(
+      group_by(
+        .data = filter(
+          .data = positives,
+          !is.na(Case_)
+        ),
+        Case_,
+        SouthFLCounties
+      )
+    ) %>%
+      dcast(SouthFLCounties ~ Case_)
+  }
   
   chartDFs[[sflVFL]]$Order <- ifelse(
     test = chartDFs[[sflVFL]]$SouthFLCounties == "Rest of state",
@@ -128,7 +171,6 @@ if(args[4]==0){
     )
   ) 
   chartDFs[[sflVFL]] <- chartDFs[[sflVFL]][order(chartDFs[[sflVFL]]$Order),]
-  
   
   chartDFs[["county"]] <- func.SummCases(
     group_by(
@@ -169,7 +211,7 @@ if(args[4]==0){
 }
 
 
-# Create CSVs for COVID19 testing data
+# Create dataframes for COVID19 testing data
 if(args[5]==0){
   
   tests <- read.csv(
@@ -191,19 +233,19 @@ if(args[5]==0){
   
 }
 
-  
-  # Write CSVs
-  out <- paste0(args[3])
-  dir.create(out)
-  
-  for (i in 1:length(chartDFs)) {
-    write.csv(
-      x = chartDFs[[i]],
-      file = paste0(out,'/',names(chartDFs)[i],".csv"),
-      na = '',
-      row.names = F
-    )
-  }
+
+# Write CSVs
+out <- paste0(args[3])
+dir.create(out)
+
+for (i in 1:length(chartDFs)) {
+  write.csv(
+    x = chartDFs[[i]],
+    file = paste0(out,'/',names(chartDFs)[i],".csv"),
+    na = '',
+    row.names = F
+  )
+}
 
 
 # Update South FL CSV
