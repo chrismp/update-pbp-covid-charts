@@ -56,30 +56,15 @@ if(args[4]==0){
     no = "Rest of state"
   )
   
-  tryCatch(
-    expr = {
-      correctUnixTimePositiveCases <- (positives$Case_/1000)
-      positives$caseDate <- format(
-        x = as.POSIXct(
-          x = correctUnixTimePositiveCases,
-          origin = "1970-01-01",
-          tz = "GMT"
-        ),
-        "%Y-%m-%d"
-      ) 
-    },
-    error = function(cond) {
-      message("ERROR: see below")
-      message(cond)
-    },
-    warning = function(cond) {
-      message("WARNING: see below")
-      message(cond)
-    },
-    finally = {
-      message("Completed attempt to process Unix timestamp of COVID-19 cases if they were written as such.")
-    }
-  )
+  correctUnixTimePositiveCases <- (positives$Case_/1000)
+  positives$caseDate <- format(
+    x = as.POSIXct(
+      x = correctUnixTimePositiveCases,
+      origin = "1970-01-01",
+      tz = "GMT"
+    ),
+    "%Y-%m-%d"
+  ) 
   
   positives$AgeGroup <- ifelse(
     test = positives$Age >= 80,
@@ -115,49 +100,48 @@ if(args[4]==0){
     )
   )
   
-  if("caseDate" %in% colnames(positives)){
-    cByD <- "cases-by-date"
-    chartDFs[[cByD]] <- func.SummCases(
-      group_by(
-        .data = positives,
-        caseDate
-      )
+  cByD <- "cases-by-date"
+  chartDFs[[cByD]] <- func.SummCases(
+    group_by(
+      .data = positives,
+      caseDate
     )
-    chartDFs[[cByD]][,"Cumulative cases"] <- cumsum(chartDFs[[cByD]]$`Confirmed cases`)
-    
-    sflVFL <- "cases-by-date-SouthFL"
-    chartDFs[[sflVFL]] <- func.SummCases(
-      group_by(
-        .data = filter(
-          .data = positives,
-          !is.na(caseDate)
-        ),
-        caseDate,
-        SouthFLCounties
-      )
-    ) %>%
-      dcast(SouthFLCounties ~ caseDate)
-  } else {
-    chartDFs[["cases-by-date"]] <- func.SummCases(
-      group_by(
-        .data = positives,
-        Case_
-      )
+  )
+  chartDFs[[cByD]][,"Cumulative cases"] <- cumsum(chartDFs[[cByD]]$`Confirmed cases`)
+  
+  hosp <- "hospitalizations-by-date"
+  chartDFs[[hosp]] <- group_by(
+    .data = filter(
+      .data = positives,
+      Hospitalized == "Yes"
+    ),
+    caseDate
+  ) %>%
+    summarise(
+      Hospitalizations = n()
     )
-    
-    sflVFL <- "cases-by-date-SouthFL"
-    chartDFs[[sflVFL]] <- func.SummCases(
-      group_by(
-        .data = filter(
-          .data = positives,
-          !is.na(Case_)
-        ),
-        Case_,
-        SouthFLCounties
-      )
-    ) %>%
-      dcast(SouthFLCounties ~ Case_)
-  }
+  chartDFs[[hosp]][,"Cumulative hospitalizations"] <- cumsum(chartDFs[[hosp]]$Hospitalizations)
+  
+  # Add hospitalizations to cumulative cases data frame
+  chartDFs[[cByD]] <- merge(
+    x = chartDFs[[cByD]],
+    y = chartDFs[[hosp]],
+    by = "caseDate",
+    all = T
+  )
+  
+  sflVFL <- "cases-by-date-SouthFL"
+  chartDFs[[sflVFL]] <- func.SummCases(
+    group_by(
+      .data = filter(
+        .data = positives,
+        !is.na(caseDate)
+      ),
+      caseDate,
+      SouthFLCounties
+    )
+  ) %>%
+    dcast(SouthFLCounties ~ caseDate)
   
   chartDFs[[sflVFL]]$Order <- ifelse(
     test = chartDFs[[sflVFL]]$SouthFLCounties == "Rest of state",
