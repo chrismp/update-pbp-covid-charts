@@ -48,6 +48,7 @@ if(args[4]==0){
   )
 
   positives[positives$County=="Dade",]$County <- "Miami-Dade"
+  positives[positives$County=="Desoto",]$County <- "DeSoto"
   
   positives$SouthFLCounties <- ifelse(
     test = positives$County == "Miami-Dade" | positives$County == "Broward" | positives$County == "Palm Beach",
@@ -222,6 +223,7 @@ if(args[5]==0){
   )
   
   tests[tests$County_1=="Dade",]$County_1 <- "Miami-Dade"
+  tests[tests$County_1=="Desoto",]$County_1 <- "DeSoto"
   
   testRateName <- "testing-rate"
   chartDFs[[testRateName]] <- merge(
