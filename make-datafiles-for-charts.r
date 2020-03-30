@@ -130,6 +130,9 @@ if(args[4]==0){
     all = T
   )
   
+  chartDFs[[cByD]][is.na(chartDFs[[cByD]])] <- 0
+  chartDFs[[cByD]]$`Rest of cases` <- chartDFs[[cByD]]$`Cumulative cases` - chartDFs[[cByD]]$Hospitalizations
+  
   sflVFL <- "cases-by-date-SouthFL"
   chartDFs[[sflVFL]] <- func.SummCases(
     group_by(
