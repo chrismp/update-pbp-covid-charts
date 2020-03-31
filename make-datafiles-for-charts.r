@@ -131,8 +131,12 @@ if(args[4]==0){
   )
   
   chartDFs[[cByD]][is.na(chartDFs[[cByD]])] <- 0
-  chartDFs[[cByD]]$`Rest of cases` <- chartDFs[[cByD]]$`Cumulative cases` - chartDFs[[cByD]]$Hospitalizations
+  chartDFs[[cByD]]$`Rest of cases` <- chartDFs[[cByD]]$`Cumulative cases` - chartDFs[[cByD]]$`Cumulative hospitalizations`
   
+  # Deaths
+  
+  
+  # South FL
   sflVFL <- "cases-by-date-SouthFL"
   chartDFs[[sflVFL]] <- func.SummCases(
     group_by(
@@ -162,6 +166,7 @@ if(args[4]==0){
   ) 
   chartDFs[[sflVFL]] <- chartDFs[[sflVFL]][order(chartDFs[[sflVFL]]$Order),]
   
+  # Cases by county
   chartDFs[["county"]] <- func.SummCases(
     group_by(
       .data = positives,
@@ -169,6 +174,7 @@ if(args[4]==0){
     )
   )
   
+  # Cases per capita by county
   positiveRateName <- "counties-positive-cases-rate"
   chartDFs[[positiveRateName]] <- merge(
     x = chartDFs[["county"]],
@@ -178,6 +184,7 @@ if(args[4]==0){
   
   chartDFs[[positiveRateName]]$`Confirmed cases per 100,000 people` <- chartDFs[[positiveRateName]]$`Confirmed cases` / chartDFs[[positiveRateName]]$`2019 population estimate` * 100000
   
+  # Gender
   chartDFs[["sex"]] <- func.SummCases(
     group_by(
       .data = positives,
@@ -185,6 +192,7 @@ if(args[4]==0){
     ) 
   )
   
+  # Age group
   chartDFs[["age-group"]] <- func.SummCases(
     group_by(
       .data = positives,
@@ -192,6 +200,7 @@ if(args[4]==0){
     )
   ) 
   
+  # Travel related
   chartDFs[["travel-related"]] <- func.SummCases(
     group_by(
       .data = positives,
