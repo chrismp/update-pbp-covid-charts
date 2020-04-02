@@ -36,7 +36,7 @@ fi
 
 echo "Making data files for charts."
 od=$o/datawrapper
-Rscript make-datafiles-for-charts.r $positiveCases $tests $od $ret1 $ret2 $timestamp $od/south-fl.csv $od/county.csv
+Rscript make-datafiles-for-charts.r $positiveCases $tests $od $ret1 $ret2 $timestamp
 
 echo "Updating charts"
 Rscript update-charts.r $timestamp $od/county.csv $od/south-fl.csv $ret1 $ret2
