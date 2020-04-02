@@ -207,12 +207,19 @@ if(args[4]==0){
       )
     )
   )
-  chartDFs[["age-group"]] <- func.SummCases(
+  
+  ag <- "age-group"
+  chartDFs[[ag]] <- func.SummCases(
     group_by(
       .data = positives,
       AgeGroup
     )
-  ) 
+  )
+  chartDFs[[ag]][is.na(chartDFs[[ag]])] <- "Unknown"
+  chartDFs[[ag]] <- chartDFs[[ag]] %>% 
+    group_by(AgeGroup) %>% 
+    summarise(`Confirmed cases` = sum(`Confirmed cases`))
+  
   
   # Travel related
   chartDFs[["travel-related"]] <- func.SummCases(
