@@ -6,7 +6,8 @@ pkgs <- c(
   "devtools",
   "dplyr",
   "forcats",
-  "reshape2"
+  "reshape2",
+  "zoo"
 )
 
 for(x in pkgs){
@@ -20,6 +21,7 @@ for(x in pkgs){
 library(dplyr)
 library(forcats)
 library(reshape2)
+library(zoo)
 
 func.SummCases <- function(gdf){
   return(
@@ -61,44 +63,10 @@ if(args[4]==0){
     x = as.POSIXct(
       x = correctUnixTimePositiveCases,
       origin = "1970-01-01",
-      tz = "GMT"
+      tz = "EST"
     ),
     "%Y-%m-%d"
   ) 
-  
-  positives$AgeGroup <- ifelse(
-    test = positives$Age >= 80,
-    yes = "80 or older",
-    no = ifelse(
-      test = positives$Age >= 70,
-      yes = "70-79",
-      no = ifelse(
-        test = positives$Age >= 60,
-        yes = "60-69",
-        no = ifelse(
-          test = positives$Age >= 50,
-          yes = "50-59",
-          no = ifelse(
-            test = positives$Age >= 40,
-            yes = "40-49",
-            no = ifelse(
-              test = positives$Age >= 30,
-              yes = "30-39",
-              no = ifelse(
-                test = positives$Age >= 18,
-                yes = "18-29",
-                no = ifelse(
-                  test = positives$Age > 0,
-                  yes = "17 or younger",
-                  no = "Unknown"
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  )
   
   cByD <- "cases-by-date"
   chartDFs[[cByD]] <- func.SummCases(
@@ -128,12 +96,13 @@ if(args[4]==0){
     y = chartDFs[[hosp]],
     by = "caseDate",
     all = T
-  )
+  ) %>%
+    mutate(
+      `Cumulative hospitalizations` = na.locf(`Cumulative hospitalizations`)
+    )
   
   chartDFs[[cByD]][is.na(chartDFs[[cByD]])] <- 0
   chartDFs[[cByD]]$`Rest of cases` <- chartDFs[[cByD]]$`Cumulative cases` - chartDFs[[cByD]]$`Cumulative hospitalizations`
-  
-  # Deaths
   
   
   # South FL
@@ -193,6 +162,39 @@ if(args[4]==0){
   )
   
   # Age group
+  positives$AgeGroup <- ifelse(
+    test = positives$Age >= 80,
+    yes = "80 or older",
+    no = ifelse(
+      test = positives$Age >= 70,
+      yes = "70-79",
+      no = ifelse(
+        test = positives$Age >= 60,
+        yes = "60-69",
+        no = ifelse(
+          test = positives$Age >= 50,
+          yes = "50-59",
+          no = ifelse(
+            test = positives$Age >= 40,
+            yes = "40-49",
+            no = ifelse(
+              test = positives$Age >= 30,
+              yes = "30-39",
+              no = ifelse(
+                test = positives$Age >= 18,
+                yes = "18-29",
+                no = ifelse(
+                  test = positives$Age > 0,
+                  yes = "17 or younger",
+                  no = "Unknown"
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
   chartDFs[["age-group"]] <- func.SummCases(
     group_by(
       .data = positives,

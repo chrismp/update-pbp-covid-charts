@@ -1,7 +1,7 @@
 devtools::install_github("munichrocker/DatawRappr")
 library(DatawRappr)
 
-args = commandArgs(trailingOnly=TRUE)
+args <- commandArgs(trailingOnly=TRUE)
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
 
