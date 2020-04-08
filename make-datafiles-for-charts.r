@@ -48,6 +48,7 @@ if(args[4]==0){
     stringsAsFactors = F
   )
 
+  positives$County <- ifelse(is.na(positives$County),"Unknown",positives$County)
   positives[positives$County=="Dade",]$County <- "Miami-Dade"
   positives[positives$County=="Desoto",]$County <- "DeSoto"
   
@@ -233,7 +234,6 @@ if(args[4]==0){
 
 # Create dataframes for COVID19 testing data
 if(args[5]==0){
-  
   tests <- read.csv(
     file = args[2],
     stringsAsFactors = F
