@@ -95,7 +95,7 @@ if(args[4]==0){
   chartDFs[[hosp]] <- group_by(
     .data = filter(
       .data = positives,
-      Hospitalized == "Yes"
+      Hospitalized %in% c("Yes","YES","yes")
     ),
     caseDate
   ) %>%
