@@ -7,7 +7,8 @@ pkgs <- c(
   "dplyr",
   "forcats",
   "reshape2",
-  "zoo"
+  "zoo",
+  "janitor"
 )
 
 for(x in pkgs){
@@ -22,6 +23,7 @@ library(dplyr)
 library(forcats)
 library(reshape2)
 library(zoo)
+library(janitor)
 
 func.SummCases <- function(gdf){
   return(
@@ -221,6 +223,44 @@ if(args[4]==0){
       Travel_related
     )
   )
+  
+  
+  # Current deaths, resident v non-resident
+  cd <- "current-deaths"
+  chartDFs[[cd]] <- filter(
+    .data = positives,
+    tolower(Died) == "yes"
+  ) %>%
+    group_by(
+      County,
+      Jurisdiction
+    ) %>%
+    summarise(
+      Deaths = n()
+    ) %>%
+    dcast(County ~ Jurisdiction) %>% 
+    rowwise() %>%
+    mutate(
+      Residents = sum(
+        `FL resident`,
+        `Not diagnosed/isolated in FL`,
+        na.rm = T
+      )
+    ) %>%
+    mutate(
+      Total = sum(
+        Residents,
+        `Non-FL resident`,
+        na.rm = T
+      )
+    )
+
+  chartDFs[[cd]] <- chartDFs[[cd]][, -which(names(chartDFs[[cd]]) %in% c("FL resident","Not diagnosed/isolated in FL"))] %>%
+    adorn_totals(
+      where = c("row"),
+      na.rm = T,
+      name = "Total"
+    )
 }
 
 
