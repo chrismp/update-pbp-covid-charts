@@ -253,14 +253,19 @@ if(args[4]==0){
         `Non-FL resident`,
         na.rm = T
       )
+    ) %>%
+    rename(
+      `Non-residents` = `Non-FL resident`
     )
 
   chartDFs[[cd]] <- chartDFs[[cd]][, -which(names(chartDFs[[cd]]) %in% c("FL resident","Not diagnosed/isolated in FL"))] %>%
     adorn_totals(
       where = c("row"),
       na.rm = T,
-      name = "Total"
+      name = "Statewide"
     )
+  
+  chartDFs[[cd]] <- chartDFs[[cd]][,c("County","Total","Residents","Non-residents")]
 }
 
 
