@@ -52,10 +52,7 @@ print(os.path.getsize(tmpf))
 
 
 # In[6]:
-
-
-tempAndLatestFileSameSize = os.path.getsize(rawDir+latestFile) == os.path.getsize(tmpf)
-if tempAndLatestFileSameSize:
+if os.path.getsize(rawDir+latestFile) <= os.path.getsize(tmpf):
     print("Downloaded file is not an update. Removing '"+tmpf+"''")
     os.remove(tmpf)
     exit(1)
