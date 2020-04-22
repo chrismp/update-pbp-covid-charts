@@ -34,9 +34,12 @@ if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
 	exit
 fi
 
-echo "Making data files for charts."
+echo "Making data files for charts not related to coronavirus deaths."
 od=$o/datawrapper
 Rscript make-datafiles-for-charts.r $positiveCases $tests $od $ret1 $ret2 $timestamp
+
+echo "Making data files for coronavirus death charts."
+Rscript deaths-by-date.r $p $od
 
 echo "Updating charts"
 Rscript update-charts.r $timestamp $od/county.csv $od/south-fl.csv $ret1 $ret2
