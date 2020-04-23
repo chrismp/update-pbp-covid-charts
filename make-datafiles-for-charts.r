@@ -60,7 +60,16 @@ if(args[4]==0){
     no = "Rest of state"
   )
   
-  positives$caseDate <- as.Date(x = positives$Case_, format = "%m/%d/%Y")
+  # positives$caseDate <- as.Date(x = positives$Case_, format = "%m/%d/%Y")
+  correctUnixTimePositiveCases <- (positives$Case_/1000)
+  positives$caseDate <- format(
+    x = as.POSIXct(
+      x = correctUnixTimePositiveCases,
+      origin = "1970-01-01",
+      tz = "EST"
+    ),
+    "%Y-%m-%d"
+  ) 
   
   # statewide cumulative cases by date
   cByD <- "cases-by-date"
