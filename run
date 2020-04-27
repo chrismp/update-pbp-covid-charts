@@ -10,21 +10,25 @@ t=$r/tests
 mkdir -p $p $t
 
 f=FL-$timestamp.csv
-positiveCases=$p/$f
-tests=$t/$f
+caseLineFile=$p/$f
+testsByCountyFile=$t/$f
 
 url1="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
 url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometry=false&outFields=*"
 
+down=download-raw-data.r
+
 echo "Downloading confirmed COVID-19 data"
 pURL="$url1/Florida_COVID19_Case_Line_Data/$url2"
-python download-covid19-data.py $pURL $p $positiveCases
+Rscript $down $pURL $caseLineFile
+# python download-covid19-data.py $pURL $p $caseLineFile
 ret1=$?
 echo $ret1
 
 echo "Downloading COVID-19 testing data"
 tURL="$url1/Florida_Testing/$url2"
-python download-covid19-data.py $tURL $t $tests
+Rscript $down $tURL $testsByCountyFile
+# python download-covid19-data.py $tURL $t $testsByCountyFile
 ret2=$?
 echo $ret2
 
@@ -36,7 +40,7 @@ fi
 
 echo "Making data files for charts not related to coronavirus deaths."
 od=$o/datawrapper
-Rscript make-datafiles-for-charts.r $positiveCases $tests $od $ret1 $ret2 $timestamp
+Rscript make-datafiles-for-charts.r $caseLineFile $testsByCountyFile $od $ret1 $ret2 $timestamp
 
 echo "Making data files for coronavirus death charts."
 Rscript deaths-by-date.r $p $od
