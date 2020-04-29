@@ -20,15 +20,13 @@ down=download-raw-data.r
 
 echo "Downloading confirmed COVID-19 data"
 pURL="$url1/Florida_COVID19_Case_Line_Data/$url2"
-Rscript $down $pURL $caseLineFile
-# python download-covid19-data.py $pURL $p $caseLineFile
+Rscript $down $pURL $p/ $caseLineFile
 ret1=$?
 echo $ret1
 
 echo "Downloading COVID-19 testing data"
 tURL="$url1/Florida_Testing/$url2"
-Rscript $down $tURL $testsByCountyFile
-# python download-covid19-data.py $tURL $t $testsByCountyFile
+Rscript $down $tURL $t/ $testsByCountyFile
 ret2=$?
 echo $ret2
 

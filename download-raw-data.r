@@ -46,7 +46,7 @@ print("Done parsing JSON")
 outdf <- do.call(rbind,cases)
 
 downloadedFiles <- list.files(
-  path = "output/raw/positive-cases/",
+  path = args[2],
   full.names = T
 )
 
@@ -54,15 +54,32 @@ latestDownload <- downloadedFiles[length(downloadedFiles)]
 latestFileDF <- read.csv(latestDownload)
 
 print("Comparing latest state data to most recently downloaded data file.")
+# print(nrow(latestFileDF))
+# print(nrow(outdf))
 
-if(nrow(latestFileDF) >= nrow(outdf)){
-  print("Latest raw data is smaller than latest downloaded dataset.")
+inspectingPositiveCaseFiles <- grepl(
+  pattern = "Florida_COVID19_Case_Line_Data",
+  x = url
+)
+
+inspectingTestsByCounty <- grepl(
+  pattern = "Florida_Testing",
+  x = url
+)
+
+if(inspectingPositiveCaseFiles && nrow(latestFileDF)>=nrow(outdf)){
+  print("Latest case line data is smaller than latest downloaded dataset.")
+  stop(1)
+}
+
+if(inspectingPositiveCaseFiles && sum(latestFileDF$T_total)==sum(outdf$T_total)){
+  print("Latest testing data is smaller than latest downloaded dataset.")
   stop(1)
 }
 
 write.csv(
   x = outdf,
-  file = args[2],
+  file = args[3],
   na = '',
   row.names = F
 )
