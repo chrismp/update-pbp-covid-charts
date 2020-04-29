@@ -50,32 +50,25 @@ downloadedFiles <- list.files(
   full.names = T
 )
 
-latestDownload <- downloadedFiles[length(downloadedFiles)]
+previousData <- downloadedFiles[length(downloadedFiles)]
 latestFileDF <- read.csv(latestDownload)
 
+
+tmp <- "temp.csv"
+write.csv(
+  x = outdf,
+  file = tmp,
+  na = '',
+  row.names = F
+)
+
 print("Comparing latest state data to most recently downloaded data file.")
-# print(nrow(latestFileDF))
-# print(nrow(outdf))
-
-inspectingPositiveCaseFiles <- grepl(
-  pattern = "Florida_COVID19_Case_Line_Data",
-  x = url
-)
-
-inspectingTestsByCounty <- grepl(
-  pattern = "Florida_Testing",
-  x = url
-)
-
-if(inspectingPositiveCaseFiles && nrow(latestFileDF)>=nrow(outdf)){
-  print("Latest case line data is smaller than latest downloaded dataset.")
+if(file.size(previousData)==file.size(tmp)){
+  print("State's latest data has not been changed.")
+  file.remove(tmp)
   stop(1)
 }
 
-if(inspectingPositiveCaseFiles && sum(latestFileDF$T_total)==sum(outdf$T_total)){
-  print("Latest testing data is smaller than latest downloaded dataset.")
-  stop(1)
-}
 
 write.csv(
   x = outdf,
