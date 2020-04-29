@@ -51,7 +51,7 @@ downloadedFiles <- list.files(
 )
 
 previousData <- downloadedFiles[length(downloadedFiles)]
-latestFileDF <- read.csv(latestDownload)
+latestFileDF <- read.csv(previousData)
 
 
 tmp <- "temp.csv"
