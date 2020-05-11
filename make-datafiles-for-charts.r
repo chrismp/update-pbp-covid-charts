@@ -60,8 +60,8 @@ if(args[4]==0){
     no = "Rest of state"
   )
   
-  # positives$caseDate <- as.Date(x = positives$Case_, format = "%m/%d/%Y")
-  correctUnixTimePositiveCases <- (positives$Case_/1000)
+  # positives$caseDate <- as.Date(x = positives$Case1, format = "%m/%d/%Y")
+  correctUnixTimePositiveCases <- (positives$Case1/1000)
   positives$caseDate <- format(
     x = as.POSIXct(
       x = correctUnixTimePositiveCases,
