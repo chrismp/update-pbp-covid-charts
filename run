@@ -19,7 +19,7 @@ url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometr
 down=download-raw-data.r
 
 echo "Downloading confirmed COVID-19 data"
-pURL="$url1/Florida_COVID19_Case_Line_Data/$url2"
+pURL="$url1/Florida_COVID19_Case_Line_Data_NEW/$url2"
 Rscript $down $pURL $p/ $caseLineFile
 ret1=$?
 echo $ret1
