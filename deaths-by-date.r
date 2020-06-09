@@ -36,6 +36,7 @@ southFLDeathsByDate <- data.frame(
 
 for (i in 1:length(rawFilenames)) {
   fname <- rawFilenames[[i]]
+  print(fname)
   timeString <- gsub(
     pattern = "FL-|.csv",
     replacement = '',
