@@ -10,9 +10,13 @@ datetime <- as.POSIXct(
   format = "%Y-%m-%d_%H%M%S"  
 )
 
-updateDateFormat <- format(
-  x = datetime,
-  format = "%B %d, %Y"
+updateDateFormat <- gsub(
+  pattern = " 0",
+  replacement = ' ',
+  x = format(
+    x = datetime,
+    format = "%B %d, %Y"
+  )
 )
 
 updateTimeFormat <- format(
