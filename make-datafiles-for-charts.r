@@ -295,7 +295,7 @@ if(args[5]==0){
     by.x = "County_1",
     by.y = "County"
   )
-  chartDFs[[testRateName]]$`Tests per 100,000 people` <- chartDFs[[testRateName]]$PUIsTotal / chartDFs[[testRateName]]$`2019 population estimate` * 100000
+  chartDFs[[testRateName]]$`Tests per 100 people` <- chartDFs[[testRateName]]$PUIsTotal / chartDFs[[testRateName]]$`2019 population estimate` * 100
 }
 
 
