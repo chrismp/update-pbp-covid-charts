@@ -70,7 +70,7 @@ if(args[5]==0){
   dw_edit_chart(
     chart_id = chartIDs[["tests-map"]],
     api_key = apikey,
-    annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,".")
+    annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,". Does not include antibody testing.")
   )
   
   dw_publish_chart(
