@@ -24,11 +24,13 @@ rawFilenames <- list.files(
 )
 
 deathsByDate <- data.frame(
+  DownloadTimestampUnix = numeric(),
   Date = as.Date(character()),
   Deaths = numeric()
 )
 
 southFLDeathsByDate <- data.frame(
+  DownloadTimestampUnix = numeric(),
   Date = as.Date(character()),
   County = character(),
   Deaths = numeric()
@@ -60,7 +62,11 @@ for (i in 1:length(rawFilenames)) {
       Died == "Yes"
     )
   )
-  deathsByDate[i, ] <- c(as.character(timeDate),deathToll)
+  deathsByDate[i, ] <- c(
+    as.numeric(as.POSIXct(timeString, format = "%Y-%m-%d_%H%M%S")),
+    as.character(timeDate),
+    deathToll
+  )
   
   southFLRecord <- filter(
     .data = raw,
@@ -72,17 +78,18 @@ for (i in 1:length(rawFilenames)) {
       Deaths = n()
     )
   
+  southFLRecord$DownloadTimestampUnix <- as.numeric(as.POSIXct(timeString, format = "%Y-%m-%d_%H%M%S"))
   southFLRecord$Date <- timeDate
   southFLDeathsByDate <- rbind(southFLDeathsByDate, southFLRecord)
 }
 
 deathsByDate <- na.omit(deathsByDate) %>%
   group_by(Date) %>%
-  slice(which.max(Deaths))
+  slice(which.max(DownloadTimestampUnix))
 
 southFLDeathsByDate <- southFLDeathsByDate %>%
   group_by(Date,County) %>%
-  slice(which.max(Deaths)) %>%
+  slice(which.max(DownloadTimestampUnix)) %>%
   dcast(
     formula = Date ~ County,
     value.var = "Deaths"
