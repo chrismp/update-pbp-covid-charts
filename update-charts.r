@@ -39,8 +39,9 @@ chartIDs <- list(
   "daily-cases" = "eXjOw",
   "total-cases-daily" = "C7GGb",
   "current-deaths-counties" = "Kbjsq",
-  "fl-deaths-by-date" = "aLim8",
-  "south-fl-deaths-by-date" = "4vTEM"
+  "fl-cumulative-deaths-by-date" = "aLim8",
+  "fl-daily-deaths" = "w6vI2",
+  "south-fl-cumulative-deaths-by-date" = "4vTEM"
 )
 
 
