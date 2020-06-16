@@ -91,6 +91,13 @@ if(args[4]==0){
   chartDFs[[sflC]]$`Broward sum cases` <- cumsum(chartDFs[[sflC]]$Broward)
   chartDFs[[sflC]]$`Miami-Dade sum cases` <- cumsum(chartDFs[[sflC]]$`Miami-Dade`)
   chartDFs[[sflC]]$`Palm Beach sum cases` <- cumsum(chartDFs[[sflC]]$`Palm Beach`)
+  
+  # Daily cases in each county
+  dailyCounties <- "daily-fl-counties"
+  chartDFs[[dailyCounties]] <- positives %>%
+    group_by(County,caseDate) %>%
+    summarise(`Daily confirmed cases` = n()) %>%
+    dcast(County ~ caseDate)
 
   
   # Hospitalizations statewide by date
@@ -296,6 +303,56 @@ if(args[5]==0){
     by.y = "County"
   )
   chartDFs[[testRateName]]$`Tests per 100 people` <- chartDFs[[testRateName]]$PUIsTotal / chartDFs[[testRateName]]$`2019 population estimate` * 100
+
+  rawTestFilenames <- list.files(args[7])
+  
+  testingByDate <- data.frame(
+    DownloadTimestampUnix = numeric(),
+    Date = as.Date(character()),
+    CumulativePeopleTested = numeric(),
+    CumulativeTests = numeric(),
+    CumulativePositives = numeric()
+  )
+  
+  for (i in 1:length(rawTestFilenames)) {
+    fname <- rawTestFilenames[[i]]
+    
+    timeString <- gsub(
+      pattern = "FL-|.csv",
+      replacement = '',
+      x = fname
+    )
+    
+    timeDate <- as.Date(
+      x = timeString,
+      format = "%Y-%m-%d_%H%M%S"
+    )
+    
+    rawTestFile <- read.csv(
+      file = paste0(args[7],fname)
+    )
+    
+    testingByDate[i, ] <- c(
+      as.numeric(as.POSIXct(timeString,format="%Y-%m-%d_%H%M%S")),
+      as.character(timeDate),
+      sum(rawTestFile$PUIsTotal),
+      sum(rawTestFile$T_total),
+      sum(rawTestFile$T_positive)
+    )
+  }
+  
+  testingByDate <-testingByDate %>% 
+    group_by(Date) %>%
+    top_n(1,DownloadTimestampUnix)
+    
+  testingByDate$DailyPeopleTested <- as.numeric(testingByDate$CumulativePeopleTested) - as.numeric(lag(testingByDate$CumulativePeopleTested,1)) 
+  testingByDate$DailyPositives <- as.numeric(testingByDate$CumulativePositives) - as.numeric(lag(testingByDate$CumulativePositives,1))
+  testingByDate$DailyTests <- as.numeric(testingByDate$CumulativeTests) - as.numeric(lag(testingByDate$CumulativeTests,1))
+  # testingByDate$DailyPercentPeoplePositive <- testingByDate$DailyPositives / testingByDate$DailyPeopleTested
+  # testingByDate$DailyPercentTestsPositive <- testingByDate$DailyPositives / testingByDate$DailyTests
+  
+  testsDateName <- "tests-by-date"
+  chartDFs[[testsDateName]] <- testingByDate
 }
 
 

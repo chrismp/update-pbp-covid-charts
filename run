@@ -38,7 +38,7 @@ fi
 
 echo "Making data files for charts not related to coronavirus deaths."
 od=$o/datawrapper
-Rscript make-datafiles-for-charts.r $caseLineFile $testsByCountyFile $od $ret1 $ret2 $timestamp
+Rscript make-datafiles-for-charts.r $caseLineFile $testsByCountyFile $od $ret1 $ret2 $timestamp $t
 
 echo "Making data files for coronavirus death charts."
 Rscript deaths-by-date.r $p $od
