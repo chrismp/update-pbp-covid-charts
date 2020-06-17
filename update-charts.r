@@ -38,6 +38,7 @@ chartIDs <- list(
   "cases-map" = "3OyJM",
   "daily-cases" = "eXjOw",
   "total-cases-daily" = "C7GGb",
+  "daily-hospitalizations" = "A7nri",
   "current-deaths-counties" = "Kbjsq",
   "fl-cumulative-deaths-by-date" = "aLim8",
   "fl-daily-deaths" = "w6vI2",
@@ -46,10 +47,8 @@ chartIDs <- list(
 
 
 if(args[4]==0){
-  # Update annotation for each chart  
-  chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
-
   for (i in 1:length(chartIDs)) {
+    chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
     if(chartIDs[[i]]==chartIDs$`age-group`){
       chartNote <- paste0(chartNote," Florida does not report coronavirus deaths of minors.")  
     }
