@@ -34,6 +34,21 @@ func.SummCases <- function(gdf){
   )
 }
 
+func.SummAgeRelatedDFs <- function(p){
+  df <- func.SummCases(
+    group_by(
+      .data = p,
+      `Age group`
+    )
+  )
+  df[is.na(df)] <- "Unknown"
+  df <- df %>% 
+    group_by(`Age group`) %>% 
+    summarise(`Confirmed cases` = sum(`Confirmed cases`))
+  
+  return(df)
+}
+
 
 countyPops <- read.csv(
   file = "source/2019-flbebr-county-pop-estimates.csv",
@@ -185,7 +200,7 @@ if(args[4]==0){
   )
   
   # Age group
-  positives$AgeGroup <- ifelse(
+  positives$`Age group` <- ifelse(
     test = positives$Age >= 80,
     yes = "80 or older",
     no = ifelse(
@@ -207,7 +222,7 @@ if(args[4]==0){
                 test = positives$Age >= 18,
                 yes = "18-29",
                 no = ifelse(
-                  test = positives$Age > 0,
+                  test = positives$Age >= 0,
                   yes = "17 or younger",
                   no = "Unknown"
                 )
@@ -219,17 +234,34 @@ if(args[4]==0){
     )
   )
   
-  ag <- "age-group"
-  chartDFs[[ag]] <- func.SummCases(
-    group_by(
+  casesByAge <- func.SummAgeRelatedDFs(positives)
+
+  hospByAge <- func.SummAgeRelatedDFs(
+    filter(
       .data = positives,
-      AgeGroup
+      grepl(
+        pattern = "yes",
+        x = Hospitalized,
+        ignore.case = T
+      )
     )
-  )
-  chartDFs[[ag]][is.na(chartDFs[[ag]])] <- "Unknown"
-  chartDFs[[ag]] <- chartDFs[[ag]] %>% 
-    group_by(AgeGroup) %>% 
-    summarise(`Confirmed cases` = sum(`Confirmed cases`))
+  ) %>%
+    rename(c("Hospitalizations"="Confirmed cases"))
+  
+  deathsbyAge <- func.SummAgeRelatedDFs(
+    filter(
+      .data = positives,
+      grepl(
+        pattern = "yes",
+        x = Died,
+        ignore.case = T
+      )
+    )
+  ) %>%
+    rename(c("Deaths"="Confirmed cases"))
+  
+  ag <- "age-group"
+  chartDFs[[ag]] <- Reduce(function(x,y) merge(x,y,all=T,by="Age group"), list(casesByAge,hospByAge,deathsbyAge))
   
   
   # Travel related
@@ -295,6 +327,7 @@ if(args[5]==0){
   tests[tests$County_1=="Dade",]$County_1 <- "Miami-Dade"
   tests[tests$County_1=="Desoto",]$County_1 <- "DeSoto"
   
+  # Tests per capita in each county
   testRateName <- "testing-rate"
   chartDFs[[testRateName]] <- merge(
     x = tests,
@@ -306,6 +339,7 @@ if(args[5]==0){
 
   rawTestFilenames <- list.files(args[7])
   
+  # Testing per day
   testingByDate <- data.frame(
     DownloadTimestampUnix = numeric(),
     Date = as.Date(character()),
