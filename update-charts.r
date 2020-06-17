@@ -1,7 +1,7 @@
+args <- commandArgs(trailingOnly=TRUE)
+
 devtools::install_github("munichrocker/DatawRappr")
 library(DatawRappr)
-
-args <- commandArgs(trailingOnly=TRUE)
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
 
@@ -48,8 +48,12 @@ chartIDs <- list(
 if(args[4]==0){
   # Update annotation for each chart  
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
-  
+
   for (i in 1:length(chartIDs)) {
+    if(chartIDs[[i]]==chartIDs$`age-group`){
+      chartNote <- paste0(chartNote," Florida does not report coronavirus deaths of minors.")  
+    }
+    
     dw_edit_chart(
       chart_id = chartIDs[[i]],
       api_key = apikey,
