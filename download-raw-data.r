@@ -63,7 +63,7 @@ write.csv(
 )
 
 print("Comparing latest state data to most recently downloaded data file.")
-if(file.size(previousData)>file.size(tmp)){
+if(file.size(previousData)>=file.size(tmp)){
   print("State's latest data has not been changed.")
   file.remove(tmp)
   stop(1)
