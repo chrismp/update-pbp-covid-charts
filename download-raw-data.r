@@ -1,3 +1,5 @@
+args <- commandArgs(trailingOnly=TRUE)
+
 pkgs <- c("jsonlite")
 
 for(x in pkgs){
@@ -12,7 +14,6 @@ library(jsonlite)
 
 print("Starting script to download raw data")
 
-args <- commandArgs(trailingOnly=TRUE)
 options(scipen = 999)
 
 url <- args[1]
@@ -20,7 +21,7 @@ url <- args[1]
 endOfRecords <- F
 offset <- 0
 esriStandardMaxLength <- 32000
-cases <- list()
+data <- list()
 
 repeat{
   fullURL <- paste0(url,"&resultOffset=",offset)
@@ -35,15 +36,15 @@ repeat{
   
   if(length(json$features)==0) break
   
-  latestListIndex <- length(cases)+1
-  cases[[latestListIndex]] <- json$features$attributes
+  latestListIndex <- length(data)+1
+  data[[latestListIndex]] <- json$features$attributes
   
   offset <- offset + esriStandardMaxLength
 }
 
 print("Done parsing JSON")
 
-outdf <- do.call(rbind,cases)
+outdf <- do.call(rbind,data)
 
 downloadedFiles <- list.files(
   path = args[2],

@@ -7,11 +7,13 @@ o=output
 r=$o/raw
 p=$r/positive-cases
 t=$r/tests
-mkdir -p $p $t
+h=$r/hospital-bed-data
+mkdir -p $p $t $h
 
 f=FL-$timestamp.csv
 caseLineFile=$p/$f
 testsByCountyFile=$t/$f
+hospitalBedFile=$h/$f
 
 url1="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
 url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometry=false&outFields=*"
@@ -29,6 +31,10 @@ tURL="$url1/Florida_Testing/$url2"
 Rscript $down $tURL $t/ $testsByCountyFile
 ret2=$?
 echo $ret2
+
+echo "Downloading AHCA data via FloridaCOVIDAction.com"
+hURL="$url1/HOSPITALS_esri/$url2"
+Rscript $down $hURL $h/ $hospitalBedFile
 
 
 if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
