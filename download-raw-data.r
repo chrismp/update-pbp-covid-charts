@@ -18,7 +18,6 @@ options(scipen = 999)
 
 url <- args[1]
 
-endOfRecords <- F
 offset <- 0
 esriStandardMaxLength <- 32000
 data <- list()
@@ -52,22 +51,23 @@ downloadedFiles <- list.files(
 )
 
 previousData <- downloadedFiles[length(downloadedFiles)]
-latestFileDF <- read.csv(previousData)
-
-
-tmp <- "temp.csv"
-write.csv(
-  x = outdf,
-  file = tmp,
-  na = '',
-  row.names = F
-)
-
-print("Comparing latest state data to most recently downloaded data file.")
-if(file.size(previousData)>=file.size(tmp)){
-  print("State's latest data has not been changed.")
-  file.remove(tmp)
-  stop(1)
+if(length(previousData)>0){
+  latestFileDF <- read.csv(previousData)  
+  
+  tmp <- "temp.csv"
+  write.csv(
+    x = outdf,
+    file = tmp,
+    na = '',
+    row.names = F
+  )
+  
+  print("Comparing latest state data to most recently downloaded data file.")
+  if(file.size(previousData)>=file.size(tmp)){
+    print("State's latest data has not been changed.")
+    file.remove(tmp)
+    stop(1)
+  }
 }
 
 

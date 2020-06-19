@@ -15,25 +15,26 @@ caseLineFile=$p/$f
 testsByCountyFile=$t/$f
 hospitalBedFile=$h/$f
 
-url1="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
+url1FLDOH="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
+url1FLCOVIDAction="https://services.arcgis.com/3wFbqsFPLeKqOlIK/ArcGIS/rest/services"
 url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometry=false&outFields=*"
 
 down=download-raw-data.r
 
 echo "Downloading confirmed COVID-19 data"
-pURL="$url1/Florida_COVID19_Case_Line_Data_NEW/$url2"
+pURL="$url1FLDOH/Florida_COVID19_Case_Line_Data_NEW/$url2"
 Rscript $down $pURL $p/ $caseLineFile
 ret1=$?
 echo $ret1
 
 echo "Downloading COVID-19 testing data"
-tURL="$url1/Florida_Testing/$url2"
+tURL="$url1FLDOH/Florida_Testing/$url2"
 Rscript $down $tURL $t/ $testsByCountyFile
 ret2=$?
 echo $ret2
 
 echo "Downloading AHCA data via FloridaCOVIDAction.com"
-hURL="$url1/HOSPITALS_esri/$url2"
+hURL="$url1FLCOVIDAction/HOSPITALS_esri/$url2"
 Rscript $down $hURL $h/ $hospitalBedFile
 
 
