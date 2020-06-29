@@ -64,11 +64,20 @@ if(length(previousData)>0){
   
   print("Comparing latest state data to most recently downloaded data file.")
   notDownloadingHospitalBedData <- !grepl("HOSPITALS_esri",args[2],fixed=T)
-  if(file.size(previousData)>=file.size(tmp) && notDownloadingHospitalBedData){
-    print("State's latest data has not been changed.")
-    file.remove(tmp)
-    stop(1)
+  if (notDownloadingHospitalBedData) {
+    if(file.size(previousData)>=file.size(tmp)){
+      print("State's latest data has not been changed.")
+      file.remove(tmp)
+      stop(1)
+    }
+  } else {
+    if(file.size(previousData)==file.size(tmp)){
+      print("Hospital beds data has not been changed.")
+      file.remove(tmp)
+      stop(1)
+    }
   }
+
 }
 
 
