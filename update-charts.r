@@ -49,7 +49,7 @@ chartIDs <- list(
 
 if(args[4]==0){
   for (i in 1:length(chartIDs)) {
-    chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
+    chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state. Errors in state reporting can lead to erroneous, wild fluctuations in the statistics.")
     # if(chartIDs[[i]]==chartIDs$`age-group`){
     #   chartNote <- paste0(chartNote," Florida does not report coronavirus deaths of minors.")  
     # }
