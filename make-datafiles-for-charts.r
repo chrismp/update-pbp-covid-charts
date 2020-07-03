@@ -383,7 +383,7 @@ if(args[5]==0){
   testingByDate$DailyPositives <- as.numeric(testingByDate$CumulativePositives) - as.numeric(lag(testingByDate$CumulativePositives,1))
   testingByDate$DailyTests <- as.numeric(testingByDate$CumulativeTests) - as.numeric(lag(testingByDate$CumulativeTests,1))
   # testingByDate$DailyPercentPeoplePositive <- testingByDate$DailyPositives / testingByDate$DailyPeopleTested
-  # testingByDate$DailyPercentTestsPositive <- testingByDate$DailyPositives / testingByDate$DailyTests
+  testingByDate$DailyPercentTestsPositive <- testingByDate$DailyPositives / testingByDate$DailyTests
   
   testsDateName <- "tests-by-date"
   chartDFs[[testsDateName]] <- testingByDate
