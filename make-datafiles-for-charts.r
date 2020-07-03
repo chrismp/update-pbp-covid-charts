@@ -375,7 +375,7 @@ if(args[5]==0){
     )
   }
   
-  testingByDate <-testingByDate %>% 
+  testingByDate <- testingByDate %>% 
     group_by(Date) %>%
     top_n(1,DownloadTimestampUnix)
     
