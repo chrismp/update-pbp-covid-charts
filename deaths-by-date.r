@@ -68,7 +68,7 @@ for (i in 1:length(rawFilenames)) {
     as.character(timeDate),
     cumulativeDeaths
   )
-  
+
   southFLRecord <- filter(
     .data = raw,
     Died == "Yes",
