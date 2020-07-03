@@ -345,7 +345,8 @@ if(args[5]==0){
     Date = as.Date(character()),
     CumulativePeopleTested = numeric(),
     CumulativeTests = numeric(),
-    CumulativePositives = numeric()
+    CumulativePositives = numeric(),
+    CumulativeNonPositives = numeric()
   )
   
   for (i in 1:length(rawTestFilenames)) {
@@ -371,19 +372,22 @@ if(args[5]==0){
       as.character(timeDate),
       sum(rawTestFile$PUIsTotal),
       sum(rawTestFile$T_total),
-      sum(rawTestFile$T_positive)
+      sum(rawTestFile$T_positive),
+      sum(rawTestFile$T_total) - sum(rawTestFile$T_positive)
     )
   }
   
   testingByDate <- testingByDate %>% 
     group_by(Date) %>%
     top_n(1,DownloadTimestampUnix)
+  
     
   testingByDate$DailyPeopleTested <- as.numeric(testingByDate$CumulativePeopleTested) - as.numeric(lag(testingByDate$CumulativePeopleTested,1)) 
   testingByDate$DailyPositives <- as.numeric(testingByDate$CumulativePositives) - as.numeric(lag(testingByDate$CumulativePositives,1))
   testingByDate$DailyTests <- as.numeric(testingByDate$CumulativeTests) - as.numeric(lag(testingByDate$CumulativeTests,1))
   # testingByDate$DailyPercentPeoplePositive <- testingByDate$DailyPositives / testingByDate$DailyPeopleTested
   testingByDate$DailyPercentTestsPositive <- testingByDate$DailyPositives / testingByDate$DailyTests
+  testingByDate$DailyNonPositiveTests <- testingByDate$DailyTests - testingByDate$DailyPositives
   
   testsDateName <- "tests-by-date"
   chartDFs[[testsDateName]] <- testingByDate
