@@ -8,7 +8,8 @@ r=$o/raw
 p=$r/positive-cases
 t=$r/tests
 h=$r/hospital-bed-data
-mkdir -p $p $t $h
+m=$o/misc
+mkdir -p $p $t $h $m
 
 f=FL-$timestamp.csv
 caseLineFile=$p/$f
@@ -43,12 +44,15 @@ if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
 	exit
 fi
 
-echo "Making data files for charts not related to coronavirus deaths."
+echo "Making data files for most charts."
 od=$o/datawrapper
 Rscript make-datafiles-for-charts.r $caseLineFile $testsByCountyFile $od $ret1 $ret2 $timestamp $t
 
 echo "Making data files for coronavirus death charts."
 Rscript deaths-by-date.r $p $od
+
+echo "Making data files for Google Sheets for other reporters"
+Rscript cases-reported-by-county-and-date.r $t $m
 
 echo "Updating charts"
 Rscript update-charts.r $timestamp $od/county.csv $od/south-fl.csv $ret1 $ret2

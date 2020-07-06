@@ -391,6 +391,10 @@ if(args[5]==0){
   
   testsDateName <- "tests-by-date"
   chartDFs[[testsDateName]] <- testingByDate
+  
+  testsDateStackedBar <- "tests-by-date-stacked-bar"
+  x <- chartDFs[[testsDateName]] %>%
+    dcast(DailyPositives ~ Date)
 }
 
 
