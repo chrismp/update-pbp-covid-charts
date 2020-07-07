@@ -50,9 +50,9 @@ downloadedFiles <- list.files(
   full.names = T
 )
 
-previousData <- downloadedFiles[length(downloadedFiles)]
+previousDataFileName <- downloadedFiles[length(downloadedFiles)]
 if(length(previousData)>0){
-  latestFileDF <- read.csv(previousData)  
+  latestFileDF <- read.csv(previousDataFileName)  
   
   tmp <- "temp.csv"
   write.csv(
@@ -63,20 +63,24 @@ if(length(previousData)>0){
   )
   
   print("Comparing latest state data to most recently downloaded data file.")
-  notDownloadingHospitalBedData <- !grepl("HOSPITALS_esri",args[2],fixed=T)
+  notDownloadingHospitalBedData <- !grepl("HOSPITALS_esri",args[1],fixed=T)
   if (notDownloadingHospitalBedData) {
-    if(file.size(previousData)>=file.size(tmp)){
+    if(file.size(previousDataFileName)>=file.size(tmp)){
       print("State's latest data has not been changed.")
       file.remove(tmp)
       stop(1)
     }
   } else {
-    if(file.size(previousData)==file.size(tmp)){
+    previousData <- read.csv(previousDataFileName)
+    
+    if(outdf$EditDate[1]==previousData$EditDate[1]){
       print("Hospital beds data has not been changed.")
       file.remove(tmp)
       stop(1)
     }
   }
+  
+  
 
 }
 
