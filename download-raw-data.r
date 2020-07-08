@@ -79,9 +79,6 @@ if(length(previousDataFileName)>0){
       stop(1)
     }
   }
-  
-  
-
 }
 
 
