@@ -51,7 +51,7 @@ downloadedFiles <- list.files(
 )
 
 previousDataFileName <- downloadedFiles[length(downloadedFiles)]
-if(length(previousData)>0){
+if(length(previousDataFileName)>0){
   latestFileDF <- read.csv(previousDataFileName)  
   
   tmp <- "temp.csv"
