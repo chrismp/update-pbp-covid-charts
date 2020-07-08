@@ -73,7 +73,7 @@ if(length(previousDataFileName)>0){
   } else {
     previousData <- read.csv(previousDataFileName)
     
-    if(outdf$EditDate[1]==previousData$EditDate[1]){
+    if(max(outdf$EditDate)==max(previousData$EditDate)){
       print("Hospital beds data has not been changed.")
       file.remove(tmp)
       stop(1)
