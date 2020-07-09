@@ -364,7 +364,7 @@ if(args[5]==0){
     )
     
     rawTestFile <- read.csv(
-      file = paste0(args[7],fname)
+      file = paste0(args[7],'/',fname)
     )
     
     testingByDate[i, ] <- c(
