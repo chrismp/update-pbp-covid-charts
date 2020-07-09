@@ -264,6 +264,17 @@ if(args[4]==0){
   chartDFs[[ag]] <- Reduce(function(x,y) merge(x,y,all=T,by="Age group"), list(casesByAge,hospByAge,deathsbyAge))
   
   
+  # Median age of cases by case date
+  meda <- "median-age-by-case-date"
+   <- group_by(
+    .data = positives,
+    caseDate
+  ) %>%
+    summarise(
+      `Median age` = median(Age, na.rm = T),
+      Cases = n()
+    )
+  
   # Travel related
   chartDFs[["travel-related"]] <- func.SummCases(
     group_by(
