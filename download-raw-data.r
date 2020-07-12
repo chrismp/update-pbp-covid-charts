@@ -84,6 +84,13 @@ if(length(previousDataFileName)>0){
 
 write.csv(
   x = outdf,
+  file = args[4],
+  na = '',
+  row.names = F
+)
+
+write.csv(
+  x = outdf,
   file = args[3],
   na = '',
   row.names = F

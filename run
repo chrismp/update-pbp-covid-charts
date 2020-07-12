@@ -24,19 +24,19 @@ down=download-raw-data.r
 
 echo "Downloading confirmed COVID-19 data"
 pURL="$url1FLDOH/Florida_COVID19_Case_Line_Data_NEW/$url2"
-Rscript $down $pURL $p/ $caseLineFile
+Rscript $down $pURL $p/ $caseLineFile $m/latest-case-line-data.csv
 ret1=$?
 echo $ret1
 
 echo "Downloading COVID-19 testing data"
 tURL="$url1FLDOH/Florida_Testing/$url2"
-Rscript $down $tURL $t/ $testsByCountyFile
+Rscript $down $tURL $t/ $testsByCountyFile $m/latest-testing-data.csv
 ret2=$?
 echo $ret2
 
 echo "Downloading AHCA data via FloridaCOVIDAction.com"
 hURL="$url1Hospitals/HOSPITALS_esri/$url2"
-Rscript $down $hURL $h/ $hospitalBedFile
+Rscript $down $hURL $h/ $hospitalBedFile $m/latest-hospital-data.csv
 
 
 if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
