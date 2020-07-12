@@ -266,7 +266,7 @@ if(args[4]==0){
   
   # Median age of cases by case date
   meda <- "median-age-by-case-date"
-   <- group_by(
+  chartDFs[[meda]] <- group_by(
     .data = positives,
     caseDate
   ) %>%
