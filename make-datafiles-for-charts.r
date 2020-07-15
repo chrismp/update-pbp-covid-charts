@@ -346,7 +346,7 @@ if(args[5]==0){
     by.x = "County_1",
     by.y = "County"
   )
-  chartDFs[[testRateName]]$`Tests per 100 people` <- chartDFs[[testRateName]]$PUIsTotal / chartDFs[[testRateName]]$`2019 population estimate` * 100
+  chartDFs[[testRateName]]$`Tests per 100 people` <- chartDFs[[testRateName]]$TPositive / chartDFs[[testRateName]]$`2019 population estimate` * 100
 
   rawTestFilenames <- list.files(args[7])
   
