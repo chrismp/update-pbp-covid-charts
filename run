@@ -8,16 +8,25 @@ r=$o/raw
 p=$r/positive-cases
 t=$r/tests
 h=$r/hospital-bed-data
+i=$r/indicators
+fca1=$r/weekly-health-metrics
+fca2=$r/deaths-in-care-facilities
+fca3=$r/long-term-care-cases
 m=$o/misc
-mkdir -p $p $t $h $m
+mkdir -p $p $t $h $i $fca1 $fca2 $fca3 $m
 
 f=FL-$timestamp.csv
 caseLineFile=$p/$f
 testsByCountyFile=$t/$f
 hospitalBedFile=$h/$f
+indicatorsFile=$i/$f
+fca1File=$fca1/$f
+fca2File=$fca2/$f
+fca3File=$fca3/$f
 
 url1FLDOH="https://services1.arcgis.com/CY1LXxl9zlJeBuRZ/ArcGIS/rest/services"
 url1Hospitals="https://services.arcgis.com/3wFbqsFPLeKqOlIK/ArcGIS/rest/services"
+url1FloridaCOVIDAction="https://services2.arcgis.com/QTlu74VtgQxQNkN3/arcgis/rest/services/"
 url2="FeatureServer/0/query?f=json&resultType=standard&where=1%3D1&returnGeometry=false&outFields=*"
 
 down=download-raw-data.r
@@ -34,10 +43,21 @@ Rscript $down $tURL $t/ $testsByCountyFile $m/latest-testing-data.csv
 ret2=$?
 echo $ret2
 
-echo "Downloading AHCA data via FloridaCOVIDAction.com"
+echo "Downloading indicators data"
+Rscript $down "$url1FLDOH/Florida_COVID19_Cases_by_County_Indicators_vw/$url2" $i/ $indicatorsFile $m/latest-testing-data.csv
+
+echo "Downloading AHCA hospitals data"
 hURL="$url1Hospitals/HOSPITALS_esri/$url2"
 Rscript $down $hURL $h/ $hospitalBedFile $m/latest-hospital-data.csv
 
+echo "Downloading surveillance and syndromic data"
+Rscript $down "$url1FloridaCOVIDAction/Florida_COVID_Action_Surveillance_and_Syndromic_Data/$url2" $fca1/ $fca1File $m/latest-hospital-data.csv
+
+echo "Downloading deaths in care facilities data"
+Rscript $down "$url1FloridaCOVIDAction/FCA_Florida_COVID19_Deaths_in_Care_Facilities/$url2" $fca2/ $fca2File $m/latest-hospital-data.csv
+
+echo "Downloading long-term care facility cases data"
+Rscript $down "$url1FloridaCOVIDAction/FCA_Florida_COVID19_Cases_in_Long_Term_Care_Facilities/$url2" $fca2/ $fca2File $m/latest-hospital-data.csv
 
 if [[ $ret1 -eq 1 && $ret2 -eq 1 ]]; then
 	echo "Exiting program"
