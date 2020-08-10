@@ -12,12 +12,10 @@ for(x in pkgs){
 
 library(jsonlite)
 
-print("Starting script to download raw data")
-
 options(scipen = 999)
 
+print("Starting script to download raw data")
 url <- args[1]
-
 offset <- 0
 esriStandardMaxLength <- 32000
 data <- list()
@@ -32,6 +30,15 @@ repeat{
   json <- fromJSON(
     txt = fullURL
   )
+  
+  if("error" %in% names(json)){
+    print(paste0("ERROR CODE: ",json$error$code))
+    print(paste0("ERROR MESSAGE: ",json$error$message))
+    print(paste0("ERROR DETAIL: ",json$error$details))
+    print("===")
+    Sys.sleep(5)
+    next
+  }
   
   if(length(json$features)==0) break
   
