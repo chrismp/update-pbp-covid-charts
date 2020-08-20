@@ -58,7 +58,8 @@ for (i in 1:length(rawFilenames)){
   keeps <- c(
     countyCol,
     "T_positive",
-    resDeathsCol
+    resDeathsCol,
+    "T_negative"
   )
   
   df <- raw[keeps]
@@ -69,6 +70,7 @@ for (i in 1:length(rawFilenames)){
     "County",
     "Cases",
     "FL resident deaths",
+    "Negative test results",
     "UNIX download timestamp",
     "Date"
   )
@@ -92,6 +94,13 @@ deaths <- do.call(rbind,dfs) %>%
     value.var = "FL resident deaths"
   )
 
+negatives <- do.call(rbind,dfs) %>%
+  group_by(Date,County) %>%
+  slice(which.max(`UNIX download timestamp`)) %>%
+  dcast(
+    formula = Date ~ County,
+    value.var = "Negative test results"
+  )
 
 o <- args[2]
 dir.create(o)
@@ -110,5 +119,11 @@ write.csv(
   row.names = F
 )
 
+write.csv(
+  x = negatives,
+  file = paste0(o,"/Negative results by county and date.csv"),
+  na = '',
+  row.names = F
+)
 
 
