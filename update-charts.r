@@ -5,8 +5,23 @@ library(DatawRappr)
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
 
+caseLineFiles <- list.files(
+  path = args[1],
+  full.names = T
+)
+
+latestFile <- caseLineFiles[length(caseLineFiles)]
+
+latestFileTimeString <- gsub(
+  pattern = ".*FL-|.csv",
+  replacement = '',
+  x = latestFile
+)
+# latestFileTime <- as.numeric(as.POSIXct(latestFileTimeString,format="%Y-%m-%d_%H%M%S"))
+
+
 datetime <- as.POSIXct(
-  x = args[1],
+  x = latestFileTimeString,
   format = "%Y-%m-%d_%H%M%S"  
 )
 
@@ -31,57 +46,52 @@ updateTimeFormat <- gsub(
 )
 
 chartIDs <- list(
-  "county-cases-chart" = "Vdnj6",
-  "travel-related" = "ORvDZ",
+  "county" = "Vdnj6",
   "age-group" = "BSF3m",
-  "south-fl" = "aof13",
-  "cases-map" = "3OyJM",
-  "daily-cases" = "eXjOw",
-  "total-cases-daily" = "C7GGb",
-  "daily-hospitalizations" = "A7nri",
-  "total-hospitalizations" = "xHrl1",
-  "current-deaths-counties" = "Kbjsq",
-  "fl-cumulative-deaths-by-date" = "aLim8",
-  "fl-daily-deaths" = "w6vI2",
-  "south-fl-cumulative-deaths-by-date" = "4vTEM",
-  "median-age-by-date" = "hMtwa"
+  "south-fl-cumulative" = "aof13",
+  "cases-by-date-SouthFL" = "eXjOw",
+  "cases-by-date" = "C7GGb",
+  "current-deaths" = "Kbjsq",
+  "median-age-by-case-date" = "hMtwa"
 )
 
 
-if(args[4]==0){
-  for (i in 1:length(chartIDs)) {
-    chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
-    # if(chartIDs[[i]]==chartIDs$`age-group`){
-    #   chartNote <- paste0(chartNote," Florida does not report coronavirus deaths of minors.")  
-    # }
-    
-    dw_edit_chart(
-      chart_id = chartIDs[[i]],
-      api_key = apikey,
-      annotate = chartNote
-    )
-    
-    dw_publish_chart(
-      chart_id = chartIDs[[i]],
-      api_key = apikey,
-      return_urls = TRUE
-    )  
-  }
-}
+for (i in 1:length(chartIDs)) {
+  f <- paste0(args[2],'/',names(chartIDs)[[i]],".csv")
+  fIn <- file.info(f)
+  editTime <- as.numeric(as.POSIXct(fIn$mtime))
+  
+  # processedDatasetAlreadyMade <- editTime > latestFileTime
+  # if(processedDatasetAlreadyMade) next
+  
+  chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
 
-
-# Update COVID19 testing map
-if(args[5]==0){
-  chartIDs[["tests-map"]] <- "4nU0g"
   dw_edit_chart(
-    chart_id = chartIDs[["tests-map"]],
+    chart_id = chartIDs[[i]],
     api_key = apikey,
-    annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,", not including antibody testing.")
+    annotate = chartNote
   )
   
   dw_publish_chart(
-    chart_id = chartIDs[["tests-map"]],
+    chart_id = chartIDs[[i]],
     api_key = apikey,
     return_urls = TRUE
   )  
 }
+
+# 
+# # Update COVID19 testing map
+# if(args[5]==0){
+#   chartIDs[["tests-map"]] <- "4nU0g"
+#   dw_edit_chart(
+#     chart_id = chartIDs[["tests-map"]],
+#     api_key = apikey,
+#     annotate = paste0("Figures reflect all known COVID-19 tests administered as of ",updateTimeFormat," on ",updateDateFormat,", not including antibody testing.")
+#   )
+#   
+#   dw_publish_chart(
+#     chart_id = chartIDs[["tests-map"]],
+#     api_key = apikey,
+#     return_urls = TRUE
+#   )  
+# }
