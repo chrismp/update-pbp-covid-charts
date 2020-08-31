@@ -17,7 +17,7 @@ latestFileTimeString <- gsub(
   replacement = '',
   x = latestFile
 )
-latestFileTime <- as.numeric(as.POSIXct(latestFileTimeString,format="%Y-%m-%d_%H%M%S"))
+# latestFileTime <- as.numeric(as.POSIXct(latestFileTimeString,format="%Y-%m-%d_%H%M%S"))
 
 
 datetime <- as.POSIXct(
@@ -68,11 +68,11 @@ for (i in 1:length(chartIDs)) {
     )
   )
 
-  processedDatasetAlreadyMade <- editTime > latestFileTime
-  if(processedDatasetAlreadyMade){
-    print("Chart file newer than raw data. Skipping.")
-    next
-  } 
+  # processedDatasetAlreadyMade <- editTime > latestFileTime
+  # if(processedDatasetAlreadyMade){
+  #   print("Chart file newer than raw data. Skipping.")
+  #   next
+  # } 
   
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
 
