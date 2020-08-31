@@ -17,7 +17,7 @@ latestFileTimeString <- gsub(
   replacement = '',
   x = latestFile
 )
-# latestFileTime <- as.numeric(as.POSIXct(latestFileTimeString,format="%Y-%m-%d_%H%M%S"))
+latestFileTime <- as.numeric(as.POSIXct(latestFileTimeString,format="%Y-%m-%d_%H%M%S"))
 
 
 datetime <- as.POSIXct(
