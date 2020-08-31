@@ -61,7 +61,12 @@ for (i in 1:length(chartIDs)) {
   fIn <- file.info(f)
   editTime <- as.numeric(as.POSIXct(fIn$mtime))
   
-  print(paste0("Attempting to upate chart ",chartIDs)[[i]]))
+  print(
+    paste0(
+      "Attempting to update chart ",
+      chartIDs[[i]]
+    )
+  )
 
   processedDatasetAlreadyMade <- editTime > latestFileTime
   if(processedDatasetAlreadyMade){

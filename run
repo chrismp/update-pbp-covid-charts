@@ -3,7 +3,7 @@
 timestamp=`date +%Y-%m-%d_%H%M%S`
 echo "Program started at $timestamp"
 
-o=../../output
+o=../output
 p=$o/raw/positive-cases
 od=$o/datawrapper
 
