@@ -61,8 +61,13 @@ for (i in 1:length(chartIDs)) {
   fIn <- file.info(f)
   editTime <- as.numeric(as.POSIXct(fIn$mtime))
   
-  # processedDatasetAlreadyMade <- editTime > latestFileTime
-  # if(processedDatasetAlreadyMade) next
+  print(paste0("Attempting to upate chart ",chartIDs)[[i]]))
+
+  processedDatasetAlreadyMade <- editTime > latestFileTime
+  if(processedDatasetAlreadyMade){
+    print("Chart file newer than raw data. Skipping.")
+    next
+  } 
   
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
 
