@@ -1,7 +1,12 @@
 args <- commandArgs(trailingOnly=TRUE)
 
-devtools::install_github("munichrocker/DatawRappr")
+#install.packages("XML", repos = "http://www.omegahat.net/R")
+library(XML)
+
+devtools::install_github("munichrocker/DatawRappr",force=T)
 library(DatawRappr)
+
+
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
 
@@ -81,7 +86,7 @@ for (i in 1:length(chartIDs)) {
     api_key = apikey,
     annotate = chartNote
   )
-  
+  print("edit done")  
   dw_publish_chart(
     chart_id = chartIDs[[i]],
     api_key = apikey,
