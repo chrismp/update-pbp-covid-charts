@@ -7,5 +7,4 @@ o=../output
 p=$o/raw/positive-cases
 od=$o/datawrapper
 
-echo "Updating charts"
 Rscript update-charts.r $p $od
