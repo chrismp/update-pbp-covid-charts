@@ -1,12 +1,9 @@
+print("Starting chart updater")
+
 args <- commandArgs(trailingOnly=TRUE)
 
-#install.packages("XML", repos = "http://www.omegahat.net/R")
-library(XML)
-
-devtools::install_github("munichrocker/DatawRappr",force=T)
+devtools::install_github("munichrocker/DatawRappr")
 library(DatawRappr)
-
-
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
 
@@ -81,12 +78,13 @@ for (i in 1:length(chartIDs)) {
   
   chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
 
+  print("Editing chart")
   dw_edit_chart(
     chart_id = chartIDs[[i]],
     api_key = apikey,
     annotate = chartNote
   )
-  print("edit done")  
+  print("Publishing chart")  
   dw_publish_chart(
     chart_id = chartIDs[[i]],
     api_key = apikey,
