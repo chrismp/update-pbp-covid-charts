@@ -54,12 +54,15 @@ chartIDs <- list(
   "cases-by-date-SouthFL" = "eXjOw",
   "cases-by-date" = "C7GGb",
   "current-deaths" = "Kbjsq",
-  "median-age-by-case-date" = "hMtwa"
+  "median-age-by-case-date" = "hMtwa",
+  "fl-deaths-by-date" = "aLim8",
+  "south-fl-deaths-by-date" = "4vTEM"
 )
 
 
 for (i in 1:length(chartIDs)) {
-  f <- paste0(args[2],'/',names(chartIDs)[[i]],".csv")
+  chartName <- names(chartIDs)[[i]]
+  f <- paste0(args[2],'/',chartName,".csv")
   fIn <- file.info(f)
   editTime <- as.numeric(as.POSIXct(fIn$mtime))
   
@@ -75,8 +78,13 @@ for (i in 1:length(chartIDs)) {
   #   print("Chart file newer than raw data. Skipping.")
   #   next
   # } 
-  
-  chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")
+
+  if(chartName %in% c("fl-deaths-by-date","south-fl-deaths-by-date")){
+  	chartNote <- paste0("Figures reflect all known COVID-19 deaths as of ",updateTimeFormat," on ",updateDateFormat," including non-Florida residents.")
+  } else {
+  	chartNote <- paste0("Figures reflect all known COVID-19 cases as of ",updateTimeFormat," on ",updateDateFormat,", including cases discovered in non-Florida residents in the state and in Florida residents outside the state.")	
+  }
+
 
   print("Editing chart")
   dw_edit_chart(
