@@ -2,7 +2,7 @@ print("Starting chart updater")
 
 args <- commandArgs(trailingOnly=TRUE)
 
-devtools::install_github("munichrocker/DatawRappr",ref="master")
+#devtools::install_github("munichrocker/DatawRappr",ref="master")
 library(DatawRappr)
 
 apikey <- Sys.getenv("DATAWRAPPER_API")
