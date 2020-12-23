@@ -56,7 +56,8 @@ chartIDs <- list(
   "current-deaths" = "Kbjsq",
   "median-age-by-case-date" = "hMtwa",
   "fl-deaths-by-date" = "aLim8",
-  "south-fl-deaths-by-date" = "4vTEM"
+  "south-fl-deaths-by-date" = "4vTEM",
+  "share-of-cases-by-region-date" = "EK2vN"
 )
 
 
