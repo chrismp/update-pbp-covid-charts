@@ -47,6 +47,8 @@ updateTimeFormat <- gsub(
   x = updateTimeFormat
 )
 
+print(paste0("Update time and date: ",updateTimeFormat,updateDateFormat))
+
 chartIDs <- list(
   "county" = "Vdnj6",
   "age-group" = "BSF3m",
