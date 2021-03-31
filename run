@@ -4,7 +4,7 @@ timestamp=`date +%Y-%m-%d_%H%M%S`
 echo "Program started at $timestamp"
 
 o=../output
-p=$o/raw/positive-cases
+p=$o/raw/tests
 od=$o/datawrapper
 
 Rscript update-charts.r $p $od
